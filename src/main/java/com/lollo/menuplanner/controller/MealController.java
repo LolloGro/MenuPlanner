@@ -1,10 +1,12 @@
 package com.lollo.menuplanner.controller;
 
+import com.lollo.menuplanner.dto.CompleteMealDto;
 import com.lollo.menuplanner.dto.MealDto;
+import com.lollo.menuplanner.entity.Meal;
 import com.lollo.menuplanner.service.MealService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import jakarta.validation.Valid;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -19,8 +21,13 @@ public class MealController {
     }
 
     @GetMapping("/meals")
-    public List<MealDto> getMeals() {
+    public List<CompleteMealDto> getMeals() {
         return mealService.getAllMeals();
+    }
+
+    @PostMapping("/meals")
+    ResponseEntity<Meal> addMeal(@Valid @RequestBody MealDto mealDto) {
+       return mealService.addMeal(mealDto);
     }
 
 }
