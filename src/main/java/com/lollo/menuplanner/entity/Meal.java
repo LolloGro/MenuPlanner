@@ -12,7 +12,7 @@ public class Meal {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false)
     private Integer id;
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String mealName;
     @Column(nullable = false)
     private String mainIngredient;
@@ -28,8 +28,8 @@ public class Meal {
     public Meal() {}
 
     public Meal(String mealName, String mainIngredient, MealType mealType, int time) {
-        this.mealName = mealName;
-        this.mainIngredient = mainIngredient;
+        this.mealName = toUpperCase(mealName);
+        this.mainIngredient = toUpperCase(mainIngredient);
         this.mealType = mealType;
         this.time = time;
     }
@@ -47,7 +47,7 @@ public class Meal {
     }
 
     public void setMealName(String mealName) {
-        this.mealName = mealName;
+        this.mealName = toUpperCase(mealName);
     }
 
     public String getMainIngredient() {
@@ -55,7 +55,7 @@ public class Meal {
     }
 
     public void setMainIngredient(String mainIngredient) {
-        this.mainIngredient = mainIngredient;
+        this.mainIngredient = toUpperCase(mainIngredient);
     }
 
     public MealType getMealType() {
@@ -80,6 +80,10 @@ public class Meal {
 
     public void setRecipe(Recipe recipe) {
         this.recipe = recipe;
+    }
+
+    public String toUpperCase(String alter){
+        return alter.substring(0, 1).toUpperCase() + alter.substring(1);
     }
 
     @Override
