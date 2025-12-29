@@ -21,11 +21,18 @@ public class Meal {
     private MealType mealType;
     @Column(nullable = false)
     private int time;
-    @OneToOne(optional = true, cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "recipe_id", unique = true, nullable = true)
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "recipe_id", unique = true)
     private Recipe recipe;
 
     public Meal() {}
+
+    public Meal(String mealName, String mainIngredient, MealType mealType, int time) {
+        this.mealName = mealName;
+        this.mainIngredient = mainIngredient;
+        this.mealType = mealType;
+        this.time = time;
+    }
 
     public Integer getId() {
         return id;
