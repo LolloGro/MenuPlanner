@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class MealService {
@@ -28,9 +29,7 @@ public class MealService {
     @Transactional
     public Meal addMeal(MealDto mealDto) {
 
-        String mealToCheck = mealDto.mealName().trim();
-
-        String nameToUpperCase =mealToCheck.substring(0, 1).toUpperCase() + mealToCheck.substring(1);
+        String nameToUpperCase =mealDto.mealName().substring(0, 1).toUpperCase() + mealDto.mealName().substring(1);
 
         if(mealRepository.findMealByMealName(nameToUpperCase).isPresent()){
             throw new DuplicateMealsException(mealDto.mealName());
@@ -57,7 +56,13 @@ public class MealService {
 
     @Transactional
     public void deleteMeal(int id) {
-      mealRepository.findById(id).orElseThrow(()-> new NotFoundException("Meal with id "+id+" not found"));
+        Optional<Meal> mealToDelete = mealRepository.findById(id);
+
+        if(mealToDelete.isPresent()){
+            mealRepository.delete(mealToDelete.get());
+        }else {
+            throw new NotFoundException("Meal with id "+id+" not found");
+        }
     }
 
 }
