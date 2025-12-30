@@ -5,6 +5,7 @@ import com.lollo.menuplanner.dto.MealDto;
 import com.lollo.menuplanner.entity.Meal;
 import com.lollo.menuplanner.service.MealService;
 import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,17 +28,20 @@ public class MealController {
 
     @PostMapping("/meals")
     ResponseEntity<Meal> addMeal(@Valid @RequestBody MealDto mealDto) {
-       return mealService.addMeal(mealDto);
+        Meal meal =  mealService.addMeal(mealDto);
+       return ResponseEntity.status(HttpStatus.CREATED).body(meal);
     }
 
     @PutMapping("/meals/{id}")
-    ResponseEntity<Meal> updateMeal(@PathVariable int id, @Valid @RequestBody MealDto mealDto) {
-        return mealService.updateMeal(id,mealDto);
+    ResponseEntity<MealDto> updateMeal(@PathVariable int id, @Valid @RequestBody MealDto mealDto) {
+        MealDto updatedMeal =  mealService.updateMeal(id, mealDto);
+        return ResponseEntity.status(HttpStatus.OK).body(updatedMeal);
     }
 
     @DeleteMapping("/meals/{id}")
     ResponseEntity<?> deleteMeal(@PathVariable int id){
-        return mealService.deleteMeal(id);
+        mealService.deleteMeal(id);
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
 
 }

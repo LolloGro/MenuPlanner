@@ -3,16 +3,13 @@ package com.lollo.menuplanner.service;
 import com.lollo.menuplanner.dto.CompleteMealDto;
 import com.lollo.menuplanner.dto.MealDto;
 import com.lollo.menuplanner.entity.Meal;
-import com.lollo.menuplanner.exception.DuplicateMeals;
-import com.lollo.menuplanner.exception.NotFound;
+import com.lollo.menuplanner.exception.DuplicateMealsException;
+import com.lollo.menuplanner.exception.NotFoundException;
 import com.lollo.menuplanner.repository.MealRepository;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class MealService {
@@ -25,56 +22,42 @@ public class MealService {
 
     public List<CompleteMealDto> getAllMeals() {
         return mealRepository.findAll().stream()
-            .map(meal -> new CompleteMealDto(meal.getId(), meal.getMealName(), meal.getMainIngredient(), meal.getMealType(), meal.getTime(), meal.getRecipe())).toList();
+            .map(meal -> new CompleteMealDto(meal.getId(), meal.getMealName(), meal.getMainIngredient(), meal.getMealType(), meal.getTime())).toList();
     }
 
     @Transactional
-    public ResponseEntity<Meal> addMeal(MealDto mealDto) {
+    public Meal addMeal(MealDto mealDto) {
 
-        String nameToUpperCase = mealDto.mealName().substring(0, 1).toUpperCase() + mealDto.mealName().substring(1);
+        String mealToCheck = mealDto.mealName().trim();
+
+        String nameToUpperCase =mealToCheck.substring(0, 1).toUpperCase() + mealToCheck.substring(1);
 
         if(mealRepository.findMealByMealName(nameToUpperCase).isPresent()){
-            throw new DuplicateMeals(mealDto.mealName());
+            throw new DuplicateMealsException(mealDto.mealName());
         }
 
-        Meal meal = new Meal();
-        meal.setMealName(mealDto.mealName());
-        meal.setMainIngredient(mealDto.mainIngredient());
-        meal.setMealType(mealDto.mealType());
-        meal.setTime(mealDto.time());
+        Meal meal = new Meal(mealDto.mealName(), mealDto.mainIngredient(), mealDto.mealType(), mealDto.time());
+
         mealRepository.save(meal);
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(meal);
+        return meal;
     }
 
     @Transactional
-    public ResponseEntity<Meal> updateMeal(int id, MealDto mealDto) {
-        Optional<Meal> mealToUpdate = mealRepository.findById(id);
+    public MealDto updateMeal(int id, MealDto mealDto) {
+        Meal mealToUpdate = mealRepository.findById(id).orElseThrow(() -> new NotFoundException("Meal with id "+id+" not found"));
 
-        if(mealToUpdate.isPresent()){
-            Meal  updatedMeal = new Meal();
-            updatedMeal.setMealName(mealDto.mealName());
-            updatedMeal.setMainIngredient(mealDto.mainIngredient());
-            updatedMeal.setMealType(mealDto.mealType());
-            updatedMeal.setTime(mealDto.time());
-            mealRepository.save(updatedMeal);
-
-            return ResponseEntity.status(HttpStatus.OK).body(updatedMeal);
-        }else{
-            throw new NotFound("Meal with id "+id+" not found");
-        }
+        mealToUpdate.setMealName(mealDto.mealName());
+        mealToUpdate.setMainIngredient(mealDto.mainIngredient());
+        mealToUpdate.setMealType(mealDto.mealType());
+        mealToUpdate.setTime(mealDto.time());
+        mealRepository.save(mealToUpdate);
+        return mealDto;
     }
 
     @Transactional
-    public ResponseEntity<?> deleteMeal(int id) {
-        Optional<Meal> mealToDelete = mealRepository.findById(id);
-
-        if(mealToDelete.isPresent()){
-            mealRepository.delete(mealToDelete.get());
-            return ResponseEntity.status(HttpStatus.OK).body(mealToDelete.get());
-        }else {
-            throw new NotFound("Meal with id "+id+" not found");
-        }
+    public void deleteMeal(int id) {
+      mealRepository.findById(id).orElseThrow(()-> new NotFoundException("Meal with id "+id+" not found"));
     }
 
 }
