@@ -40,7 +40,7 @@ public class MealController {
     @DeleteMapping("/meals/{id}")
     ResponseEntity<?> deleteMeal(@PathVariable int id){
         mealService.deleteMeal(id);
-        return ResponseEntity.status(HttpStatus.OK).build();
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
 }

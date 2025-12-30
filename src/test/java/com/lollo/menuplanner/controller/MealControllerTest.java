@@ -138,7 +138,7 @@ class MealControllerTest{
 
         mockMvc.perform(delete("/api/meals/{id}", id)
             .with(csrf()))
-            .andExpect(status().isOk());
+            .andExpect(status().isNoContent());
     }
 
      @Test
