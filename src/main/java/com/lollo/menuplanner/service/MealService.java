@@ -65,4 +65,16 @@ public class MealService {
         }
     }
 
+    @Transactional
+    public ResponseEntity<?> deleteMeal(int id) {
+        Optional<Meal> mealToDelete = mealRepository.findById(id);
+
+        if(mealToDelete.isPresent()){
+            mealRepository.delete(mealToDelete.get());
+            return ResponseEntity.status(HttpStatus.OK).body(mealToDelete.get());
+        }else {
+            throw new NotFound("Meal with id "+id+" not found");
+        }
+    }
+
 }

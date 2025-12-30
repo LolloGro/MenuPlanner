@@ -13,6 +13,7 @@ import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import tools.jackson.core.type.TypeReference;
@@ -30,6 +31,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 @SpringBootTest
 @WithMockUser
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 class MealControllerTest{
 
     @Autowired
@@ -111,7 +113,7 @@ class MealControllerTest{
     }
 
     @Test
-    void shouldReturnErrorMessageNotFound() throws Exception {
+    void shouldReturnErrorMessageWhenMealToUpdateNotFound() throws Exception {
         MealDto meal = new MealDto("Carrot cake", "Carrots", MealType.DESSERT, 60);
 
         mockMvc.perform(put("/api/meals/150")
@@ -122,4 +124,18 @@ class MealControllerTest{
             .andExpect(content().string("Meal with id 150 not found"));
     }
 
+    @Test
+    void shouldDeleteMeal() throws Exception {
+        mockMvc.perform(delete("/api/meals/1")
+            .with(csrf()))
+            .andExpect(status().isOk());
+    }
+
+     @Test
+    void shoudlReturnErrorMessageWhenMealToDeleteNotFound() throws Exception {
+        mockMvc.perform(delete("/api/meals/150")
+            .with(csrf()))
+            .andExpect(status().isNotFound())
+            .andExpect(content().string("Meal with id 150 not found"));
+     }
 }
