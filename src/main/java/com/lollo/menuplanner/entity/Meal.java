@@ -12,7 +12,7 @@ public class Meal {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false)
     private Integer id;
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String mealName;
     @Column(nullable = false)
     private String mainIngredient;
@@ -21,11 +21,18 @@ public class Meal {
     private MealType mealType;
     @Column(nullable = false)
     private int time;
-    @OneToOne(optional = true, cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "recipe_id", unique = true, nullable = true)
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "recipe_id", unique = true)
     private Recipe recipe;
 
     public Meal() {}
+
+    public Meal(String mealName, String mainIngredient, MealType mealType, int time) {
+        this.mealName = capitalizeFirstLetter(mealName);
+        this.mainIngredient = capitalizeFirstLetter(mainIngredient);
+        this.mealType = mealType;
+        this.time = time;
+    }
 
     public Integer getId() {
         return id;
@@ -40,7 +47,7 @@ public class Meal {
     }
 
     public void setMealName(String mealName) {
-        this.mealName = mealName;
+        this.mealName = capitalizeFirstLetter(mealName);
     }
 
     public String getMainIngredient() {
@@ -48,7 +55,7 @@ public class Meal {
     }
 
     public void setMainIngredient(String mainIngredient) {
-        this.mainIngredient = mainIngredient;
+        this.mainIngredient = capitalizeFirstLetter(mainIngredient);
     }
 
     public MealType getMealType() {
@@ -73,6 +80,15 @@ public class Meal {
 
     public void setRecipe(Recipe recipe) {
         this.recipe = recipe;
+    }
+
+    public String capitalizeFirstLetter(String alter){
+
+        if(alter == null || alter.isEmpty()){
+            return alter;
+        }
+
+        return alter.substring(0, 1).toUpperCase() + alter.substring(1);
     }
 
     @Override
