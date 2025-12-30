@@ -88,8 +88,6 @@ public class Meal {
             return alter;
         }
 
-        alter = alter.trim();
-
         return alter.substring(0, 1).toUpperCase() + alter.substring(1);
     }
 

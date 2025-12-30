@@ -62,7 +62,7 @@ class MealControllerTest{
             .andReturn();
 
         String result = response.getResponse().getContentAsString();
-        List<MealDto> meal = objectMapper.readValue(result, new TypeReference<>(){});
+        List<CompleteMealDto> meal = objectMapper.readValue(result, new TypeReference<>(){});
 
         assertNotNull(meal);
         assertEquals(1, meal.size());
