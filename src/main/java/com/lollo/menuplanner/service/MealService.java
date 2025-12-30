@@ -4,6 +4,7 @@ import com.lollo.menuplanner.dto.CompleteMealDto;
 import com.lollo.menuplanner.dto.MealDto;
 import com.lollo.menuplanner.entity.Meal;
 import com.lollo.menuplanner.exception.DuplicateMeals;
+import com.lollo.menuplanner.exception.NotFound;
 import com.lollo.menuplanner.repository.MealRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class MealService {
@@ -45,5 +47,22 @@ public class MealService {
         return ResponseEntity.status(HttpStatus.CREATED).body(meal);
     }
 
+    @Transactional
+    public ResponseEntity<Meal> updateMeal(int id, MealDto mealDto) {
+        Optional<Meal> mealToUpdate = mealRepository.findById(id);
+
+        if(mealToUpdate.isPresent()){
+            Meal  updatedMeal = new Meal();
+            updatedMeal.setMealName(mealDto.mealName());
+            updatedMeal.setMainIngredient(mealDto.mainIngredient());
+            updatedMeal.setMealType(mealDto.mealType());
+            updatedMeal.setTime(mealDto.time());
+            mealRepository.save(updatedMeal);
+
+            return ResponseEntity.status(HttpStatus.OK).body(updatedMeal);
+        }else{
+            throw new NotFound("Meal with id "+id+" not found");
+        }
+    }
 
 }

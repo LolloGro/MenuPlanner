@@ -21,10 +21,9 @@ import tools.jackson.databind.ObjectMapper;
 import java.util.List;
 
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @Import(TestcontainersConfiguration.class)
@@ -97,6 +96,30 @@ class MealControllerTest{
             .with(csrf()))
             .andExpect(status().isConflict())
             .andExpect(content().string("Meal with name Veggie soup already exists"));
+    }
+
+    @Test
+    void shouldUpdatedMeal() throws Exception {
+        MealDto meal = new MealDto("Carrot cake", "Carrots", MealType.DESSERT, 60);
+
+        mockMvc.perform(put("/api/meals/1")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(objectMapper.writeValueAsString(meal))
+            .with(csrf()))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.mealName").value("Carrot cake"));
+    }
+
+    @Test
+    void shouldReturnErrorMessageNotFound() throws Exception {
+        MealDto meal = new MealDto("Carrot cake", "Carrots", MealType.DESSERT, 60);
+
+        mockMvc.perform(put("/api/meals/150")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(objectMapper.writeValueAsString(meal))
+            .with(csrf()))
+            .andExpect(status().isNotFound())
+            .andExpect(content().string("Meal with id 150 not found"));
     }
 
 }

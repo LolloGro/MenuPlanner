@@ -30,4 +30,9 @@ public class MealController {
        return mealService.addMeal(mealDto);
     }
 
+    @PutMapping("/meals/{id}")
+    ResponseEntity<Meal> updateMeal(@PathVariable int id, @Valid @RequestBody MealDto mealDto) {
+        return mealService.updateMeal(id,mealDto);
+    }
+
 }
