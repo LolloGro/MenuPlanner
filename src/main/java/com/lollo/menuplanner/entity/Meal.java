@@ -28,8 +28,8 @@ public class Meal {
     public Meal() {}
 
     public Meal(String mealName, String mainIngredient, MealType mealType, int time) {
-        this.mealName = toUpperCase(mealName);
-        this.mainIngredient = toUpperCase(mainIngredient);
+        this.mealName = capitalizeFirstLetter(mealName);
+        this.mainIngredient = capitalizeFirstLetter(mainIngredient);
         this.mealType = mealType;
         this.time = time;
     }
@@ -47,7 +47,7 @@ public class Meal {
     }
 
     public void setMealName(String mealName) {
-        this.mealName = toUpperCase(mealName);
+        this.mealName = capitalizeFirstLetter(mealName);
     }
 
     public String getMainIngredient() {
@@ -55,7 +55,7 @@ public class Meal {
     }
 
     public void setMainIngredient(String mainIngredient) {
-        this.mainIngredient = toUpperCase(mainIngredient);
+        this.mainIngredient = capitalizeFirstLetter(mainIngredient);
     }
 
     public MealType getMealType() {
@@ -82,7 +82,14 @@ public class Meal {
         this.recipe = recipe;
     }
 
-    public String toUpperCase(String alter){
+    public String capitalizeFirstLetter(String alter){
+
+        if(alter == null || alter.isEmpty()){
+            return alter;
+        }
+
+        alter = alter.trim();
+
         return alter.substring(0, 1).toUpperCase() + alter.substring(1);
     }
 
