@@ -1,10 +1,12 @@
 package com.lollo.menuplanner.controller;
 
 import com.lollo.menuplanner.TestcontainersConfiguration;
+import com.lollo.menuplanner.dto.CompleteMealDto;
 import com.lollo.menuplanner.dto.MealDto;
 import com.lollo.menuplanner.entity.Meal;
 import com.lollo.menuplanner.entity.MealType;
 import com.lollo.menuplanner.repository.MealRepository;
+import com.lollo.menuplanner.service.MealService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +15,6 @@ import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import tools.jackson.core.type.TypeReference;
@@ -31,7 +32,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 @SpringBootTest
 @WithMockUser
-@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 class MealControllerTest{
 
     @Autowired
@@ -40,6 +40,8 @@ class MealControllerTest{
     private MockMvc mockMvc;
     @Autowired
     private ObjectMapper objectMapper;
+    @Autowired
+    private MealService mealService;
 
     @BeforeEach
     void setUp() {
@@ -78,7 +80,7 @@ class MealControllerTest{
     }
 
     @Test
-    void shouldChangeNameToUpperCase() throws Exception {
+    void shouldChangeNameCapitalizeFirstLetter() throws Exception {
         MealDto meal = new MealDto("pancake", "egg",  MealType.LUNCH, 30);
 
         mockMvc.perform(post("/api/meals")
@@ -102,9 +104,13 @@ class MealControllerTest{
 
     @Test
     void shouldUpdatedMeal() throws Exception {
+        List<CompleteMealDto> listOfMeals = mealService.getAllMeals();
+
+        Integer id = listOfMeals.getFirst().id();
+
         MealDto meal = new MealDto("Carrot cake", "Carrots", MealType.DESSERT, 60);
 
-        mockMvc.perform(put("/api/meals/1")
+        mockMvc.perform(put("/api/meals/{id}", id)
             .contentType(MediaType.APPLICATION_JSON)
             .content(objectMapper.writeValueAsString(meal))
             .with(csrf()))
@@ -126,13 +132,17 @@ class MealControllerTest{
 
     @Test
     void shouldDeleteMeal() throws Exception {
-        mockMvc.perform(delete("/api/meals/1")
+        List<CompleteMealDto> listOfMeals = mealService.getAllMeals();
+
+        Integer id = listOfMeals.getFirst().id();
+
+        mockMvc.perform(delete("/api/meals/{id}", id)
             .with(csrf()))
             .andExpect(status().isOk());
     }
 
      @Test
-    void shoudlReturnErrorMessageWhenMealToDeleteNotFound() throws Exception {
+    void shouldReturnErrorMessageWhenMealToDeleteNotFound() throws Exception {
         mockMvc.perform(delete("/api/meals/150")
             .with(csrf()))
             .andExpect(status().isNotFound())
