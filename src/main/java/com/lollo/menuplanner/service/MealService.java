@@ -51,7 +51,8 @@ public class MealService {
         mealToUpdate.setMealType(mealDto.mealType());
         mealToUpdate.setTime(mealDto.time());
         mealRepository.save(mealToUpdate);
-        return mealDto;
+
+        return new MealDto(mealToUpdate.getMealName(), mealToUpdate.getMainIngredient(), mealToUpdate.getMealType(), mealToUpdate.getTime());
     }
 
     @Transactional
