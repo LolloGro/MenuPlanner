@@ -2,7 +2,6 @@ package com.lollo.menuplanner.controller;
 
 import com.lollo.menuplanner.dto.CompleteMealDto;
 import com.lollo.menuplanner.dto.MealDto;
-import com.lollo.menuplanner.entity.Meal;
 import com.lollo.menuplanner.service.MealService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -27,8 +26,8 @@ public class MealController {
     }
 
     @PostMapping("/meals")
-    ResponseEntity<Meal> addMeal(@Valid @RequestBody MealDto mealDto) {
-        Meal meal =  mealService.addMeal(mealDto);
+    ResponseEntity<MealDto> addMeal(@Valid @RequestBody MealDto mealDto) {
+        MealDto meal =  mealService.addMeal(mealDto);
        return ResponseEntity.status(HttpStatus.CREATED).body(meal);
     }
 

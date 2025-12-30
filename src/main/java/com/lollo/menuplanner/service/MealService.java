@@ -27,7 +27,7 @@ public class MealService {
     }
 
     @Transactional
-    public Meal addMeal(MealDto mealDto) {
+    public MealDto addMeal(MealDto mealDto) {
 
         String nameToUpperCase =mealDto.mealName().substring(0, 1).toUpperCase() + mealDto.mealName().substring(1);
 
@@ -39,7 +39,7 @@ public class MealService {
 
         mealRepository.save(meal);
 
-        return meal;
+        return new MealDto(meal.getMealName(), meal.getMainIngredient(), meal.getMealType(), meal.getTime());
     }
 
     @Transactional
