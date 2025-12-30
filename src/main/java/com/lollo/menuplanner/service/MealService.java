@@ -29,7 +29,7 @@ public class MealService {
     @Transactional
     public MealDto addMeal(MealDto mealDto) {
 
-        String nameToUpperCase =mealDto.mealName().substring(0, 1).toUpperCase() + mealDto.mealName().substring(1);
+        String nameToUpperCase = capitalizeFirstLetter(mealDto.mealName());
 
         if(mealRepository.findMealByMealName(nameToUpperCase).isPresent()){
             throw new DuplicateMealsException(mealDto.mealName());
@@ -45,6 +45,12 @@ public class MealService {
     @Transactional
     public MealDto updateMeal(int id, MealDto mealDto) {
         Meal mealToUpdate = mealRepository.findById(id).orElseThrow(() -> new NotFoundException("Meal with id "+id+" not found"));
+
+        String nameToUpperCase = capitalizeFirstLetter(mealDto.mealName());
+
+        if(mealRepository.findMealByMealName(nameToUpperCase).isPresent()){
+            throw new DuplicateMealsException(mealDto.mealName());
+        }
 
         mealToUpdate.setMealName(mealDto.mealName());
         mealToUpdate.setMainIngredient(mealDto.mainIngredient());
@@ -64,6 +70,15 @@ public class MealService {
         }else {
             throw new NotFoundException("Meal with id "+id+" not found");
         }
+    }
+
+    public String capitalizeFirstLetter(String alter){
+
+        if(alter == null || alter.isEmpty()){
+            return alter;
+        }
+
+        return alter.substring(0, 1).toUpperCase() + alter.substring(1);
     }
 
 }
