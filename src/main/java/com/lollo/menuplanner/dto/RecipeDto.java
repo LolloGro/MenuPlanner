@@ -1,14 +1,9 @@
 package com.lollo.menuplanner.dto;
 
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Positive;
+import java.util.List;
 
 public record RecipeDto(
-    @NotBlank
-    String ingredient,
-    @Positive
-    double amount,
-    String measurement,
+    List<Ingredient> ingredient,
     String description
 ) {
 }
