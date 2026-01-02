@@ -21,8 +21,7 @@ public class Meal {
     private MealType mealType;
     @Column(nullable = false)
     private int time;
-    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "recipe_id", unique = true)
+    @OneToOne(mappedBy = "meal", cascade = CascadeType.ALL, orphanRemoval = true)
     private Recipe recipe;
 
     public Meal() {}
