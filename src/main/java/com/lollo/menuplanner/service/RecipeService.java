@@ -37,4 +37,21 @@ public class RecipeService {
 
         return new RecipeDto(newRecipe.getIngredient(), newRecipe.getDescription());
     }
+
+    @Transactional
+    public RecipeDto updateRecipe(RecipeDto recipe, int id) {
+        Meal meal = mealRepository.findById(id).orElseThrow(() -> new NotFoundException("Meal not found"));
+
+        Recipe recipeToUpdate = meal.getRecipe();
+
+        if(recipeToUpdate == null) {
+            throw new NotFoundException("Recipe not found");
+        }
+
+        recipeToUpdate.setIngredient(recipe.ingredient());
+        recipeToUpdate.setDescription(recipe.description());
+        recipeRepository.save(recipeToUpdate);
+
+        return new RecipeDto(recipeToUpdate.getIngredient(), recipeToUpdate.getDescription());
+    }
 }
