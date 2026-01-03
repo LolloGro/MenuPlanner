@@ -1,8 +1,11 @@
 package com.lollo.menuplanner.entity;
 
+import com.lollo.menuplanner.dto.Ingredient;
 import jakarta.persistence.*;
 import org.hibernate.proxy.HibernateProxy;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -13,10 +16,12 @@ public class Recipe {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false)
     private Integer id;
-    @Column(nullable = false)
-    private String ingredient;
-    private double amount;
-    private String measurement;
+    @OneToOne
+    @JoinColumn(name = "meal_id", nullable = false,  unique = true)
+    private Meal meal;
+    @ElementCollection
+    @CollectionTable(name = "recipe_ingredients", joinColumns = @JoinColumn(name = "recipe_id"))
+    private List<Ingredient> ingredient = new ArrayList<>();
     private String description;
 
     public Recipe() {}
@@ -29,28 +34,20 @@ public class Recipe {
         this.id = id;
     }
 
-    public String getIngredient() {
+    public Meal getMeal() {
+        return meal;
+    }
+
+    public void setMeal(Meal meal) {
+        this.meal = meal;
+    }
+
+    public List<Ingredient> getIngredient() {
         return ingredient;
     }
 
-    public void setIngredient(String ingredient) {
+    public void setIngredient(List<Ingredient> ingredient) {
         this.ingredient = ingredient;
-    }
-
-    public double getAmount() {
-        return amount;
-    }
-
-    public void setAmount(double amount) {
-        this.amount = amount;
-    }
-
-    public String getMeasurement() {
-        return measurement;
-    }
-
-    public void setMeasurement(String measurement) {
-        this.measurement = measurement;
     }
 
     public String getDescription() {

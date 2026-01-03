@@ -5,6 +5,8 @@ import org.hibernate.proxy.HibernateProxy;
 
 import java.util.Objects;
 
+import static com.lollo.menuplanner.util.Capitalize.capitalizeFirstLetter;
+
 @Entity
 @Table(name = "meal")
 public class Meal {
@@ -21,8 +23,7 @@ public class Meal {
     private MealType mealType;
     @Column(nullable = false)
     private int time;
-    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "recipe_id", unique = true)
+    @OneToOne(mappedBy = "meal", cascade = CascadeType.ALL, orphanRemoval = true)
     private Recipe recipe;
 
     public Meal() {}
@@ -80,15 +81,6 @@ public class Meal {
 
     public void setRecipe(Recipe recipe) {
         this.recipe = recipe;
-    }
-
-    public String capitalizeFirstLetter(String alter){
-
-        if(alter == null || alter.isEmpty()){
-            return alter;
-        }
-
-        return alter.substring(0, 1).toUpperCase() + alter.substring(1);
     }
 
     @Override
