@@ -140,6 +140,35 @@ class RecipeControllerTest {
             .andExpect(content().string("Recipe not found"));
     }
 
+    @Test
+    void shouldDeleteRecipe() throws Exception {
+        int id = idForMeal();
+
+        Meal meal = mealRepository.findById(id).orElseThrow();
+
+        RecipeDto recipe = createRecipe("carrot", 2.0);
+
+        Recipe newRecipe = new Recipe();
+        newRecipe.setMeal(meal);
+        newRecipe.setIngredient(recipe.ingredient());
+        newRecipe.setDescription(recipe.description());
+        recipeRepository.save(newRecipe);
+
+        mockMvc.perform(delete("/api/meals/{id}/recipes", id)
+                .with(csrf()))
+            .andExpect(status().isNoContent());
+    }
+
+    @Test
+    void shouldReturnErrorMessageIfNoRecipeExists() throws Exception {
+        int id = idForMeal();
+
+        mockMvc.perform(delete("/api/meals/{id}/recipes", id)
+                .with(csrf()))
+            .andExpect(status().isNotFound())
+            .andExpect(content().string("Recipe not found"));
+    }
+
     public int idForMeal(){
         List<CompleteMealDto> listOfMeals = mealService.getAllMeals();
 

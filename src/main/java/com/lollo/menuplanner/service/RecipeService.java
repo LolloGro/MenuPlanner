@@ -54,4 +54,15 @@ public class RecipeService {
 
         return new RecipeDto(recipeToUpdate.getIngredient(), recipeToUpdate.getDescription());
     }
+
+    @Transactional
+    public void deleteRecipe(int id) {
+        Meal meal = mealRepository.findById(id).orElseThrow(() -> new NotFoundException("Meal not found"));
+
+        if(meal.getRecipe() == null) {
+            throw new NotFoundException("Recipe not found");
+        }
+
+        recipeRepository.deleteById(id);
+    }
 }

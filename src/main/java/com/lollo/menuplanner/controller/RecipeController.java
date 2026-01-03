@@ -28,4 +28,10 @@ public class RecipeController {
       return ResponseEntity.status(HttpStatus.OK).body(updatedRecipe);
     }
 
+    @DeleteMapping("/recipes")
+    public ResponseEntity<?> deleteRecipe(@PathVariable Integer id) {
+        recipeService.deleteRecipe(id);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
 }
