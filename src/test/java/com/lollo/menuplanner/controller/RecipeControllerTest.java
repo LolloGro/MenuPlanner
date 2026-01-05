@@ -2,7 +2,7 @@ package com.lollo.menuplanner.controller;
 
 import com.lollo.menuplanner.TestcontainersConfiguration;
 import com.lollo.menuplanner.dto.CompleteMealDto;
-import com.lollo.menuplanner.dto.Ingredient;
+import com.lollo.menuplanner.entity.Ingredient;
 import com.lollo.menuplanner.dto.RecipeDto;
 import com.lollo.menuplanner.entity.Meal;
 import com.lollo.menuplanner.entity.MealType;
@@ -76,7 +76,7 @@ class RecipeControllerTest {
 
         Recipe newRecipe = new Recipe();
         newRecipe.setMeal(meal);
-        newRecipe.setIngredient(recipe.ingredient());
+        newRecipe.setIngredient(recipe.ingredients());
         newRecipe.setDescription(recipe.description());
         recipeRepository.save(newRecipe);
 
@@ -103,7 +103,7 @@ class RecipeControllerTest {
     }
 
     @Test
-    void shouldUpdatedRecipe() throws Exception {
+    void shouldUpdateRecipe() throws Exception {
     int id  = idForMeal();
 
     Meal meal = mealRepository.findById(id).orElseThrow();
@@ -112,7 +112,7 @@ class RecipeControllerTest {
 
         Recipe newRecipe = new Recipe();
         newRecipe.setMeal(meal);
-        newRecipe.setIngredient(carrotRecipe.ingredient());
+        newRecipe.setIngredient(carrotRecipe.ingredients());
         newRecipe.setDescription(carrotRecipe.description());
         recipeRepository.save(newRecipe);
 
@@ -123,7 +123,7 @@ class RecipeControllerTest {
             .content(objectMapper.writeValueAsString(potatoRecipe))
             .with(csrf()))
             .andExpect(status().isOk())
-            .andExpect( jsonPath("$.ingredient[0].ingredient").value("potato"));
+            .andExpect( jsonPath("$.ingredients[0].ingredient").value("potato"));
     }
 
     @Test
@@ -150,7 +150,7 @@ class RecipeControllerTest {
 
         Recipe newRecipe = new Recipe();
         newRecipe.setMeal(meal);
-        newRecipe.setIngredient(recipe.ingredient());
+        newRecipe.setIngredient(recipe.ingredients());
         newRecipe.setDescription(recipe.description());
         recipeRepository.save(newRecipe);
 
@@ -176,11 +176,11 @@ class RecipeControllerTest {
     }
 
     public RecipeDto createRecipe(String ingredient, double amount){
-        Ingredient carrot = new Ingredient(ingredient, amount, "st");
+        Ingredient newIngredient = new Ingredient(ingredient, amount, "st");
         Ingredient onion = new Ingredient("onion", 1.0, "st");
         Ingredient water =  new Ingredient("water", 1.0, "L");
 
-        List<Ingredient> ingredients = List.of(carrot, onion, water);
+        List<Ingredient> ingredients = List.of(newIngredient, onion, water);
 
         return new RecipeDto(ingredients, "1. Chop 2. Boil");
     }

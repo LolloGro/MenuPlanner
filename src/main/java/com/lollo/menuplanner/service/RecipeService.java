@@ -13,7 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class RecipeService {
 
-    private final MealRepository  mealRepository;
+    private final MealRepository mealRepository;
     private final RecipeRepository recipeRepository;
 
     public RecipeService(MealRepository mealRepository, RecipeRepository recipeRepository) {
@@ -31,7 +31,7 @@ public class RecipeService {
 
         Recipe newRecipe = new Recipe();
         newRecipe.setMeal(meal);
-        newRecipe.setIngredient(recipe.ingredient());
+        newRecipe.setIngredient(recipe.ingredients());
         newRecipe.setDescription(recipe.description());
         recipeRepository.save(newRecipe);
 
@@ -48,7 +48,7 @@ public class RecipeService {
             throw new NotFoundException("Recipe not found");
         }
 
-        recipeToUpdate.setIngredient(recipe.ingredient());
+        recipeToUpdate.setIngredient(recipe.ingredients());
         recipeToUpdate.setDescription(recipe.description());
         recipeRepository.save(recipeToUpdate);
 
@@ -63,6 +63,6 @@ public class RecipeService {
             throw new NotFoundException("Recipe not found");
         }
 
-        recipeRepository.deleteById(id);
+        recipeRepository.delete(meal.getRecipe());
     }
 }

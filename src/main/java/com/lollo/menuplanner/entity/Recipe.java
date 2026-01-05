@@ -1,6 +1,5 @@
 package com.lollo.menuplanner.entity;
 
-import com.lollo.menuplanner.dto.Ingredient;
 import jakarta.persistence.*;
 import org.hibernate.proxy.HibernateProxy;
 
