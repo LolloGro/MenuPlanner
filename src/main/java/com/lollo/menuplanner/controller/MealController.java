@@ -21,8 +21,8 @@ public class MealController {
     }
 
     @GetMapping("/meals")
-    public List<CompleteMealDto> getMeals() {
-        return mealService.getAllMeals();
+    public ResponseEntity<List<CompleteMealDto>>  getMeals() {
+        return ResponseEntity.ok(mealService.getAllMeals());
     }
 
     @PostMapping("/meals")
