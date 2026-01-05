@@ -11,6 +11,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+import static com.lollo.menuplanner.util.Capitalize.capitalizeFirstLetter;
+
 @Service
 public class MealService {
 
@@ -47,7 +49,7 @@ public class MealService {
 
         String nameToUpperCase = capitalizeFirstLetter(mealDto.mealName());
 
-        if(mealRepository.findMealByMealName(nameToUpperCase).isPresent()){
+        if(mealRepository.findMealByMealName(nameToUpperCase).filter(meal -> !meal.getId().equals(id)).isPresent()){
             throw new DuplicateResourcesException("Meal with name " + mealDto.mealName() + " already exists");
         }
 
@@ -65,15 +67,6 @@ public class MealService {
         Meal mealToDelete = mealRepository.findById(id).orElseThrow(() -> new NotFoundException("Meal with id "+id+" not found"));
 
         mealRepository.delete(mealToDelete);
-    }
-
-    public String capitalizeFirstLetter(String alter){
-
-        if(alter == null || alter.isEmpty()){
-            return alter;
-        }
-
-        return alter.substring(0, 1).toUpperCase() + alter.substring(1);
     }
 
 }
