@@ -1,4 +1,4 @@
-package com.lollo.menuplanner.dto;
+package com.lollo.menuplanner.entity;
 
 import jakarta.persistence.Embeddable;
 import jakarta.validation.constraints.NotBlank;
