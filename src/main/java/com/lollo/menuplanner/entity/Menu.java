@@ -1,6 +1,7 @@
 package com.lollo.menuplanner.entity;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.proxy.HibernateProxy;
 
 import java.time.LocalDateTime;
@@ -18,7 +19,7 @@ public class Menu {
     private Integer id;
     @Column(nullable = false)
     private String menuName;
-    @Column(nullable = false)
+    @CreationTimestamp
     private LocalDateTime menuCreatedDate;
     @ElementCollection
     @CollectionTable(name = "menu_meals", joinColumns = @JoinColumn(name = "menu_id"))
@@ -44,10 +45,6 @@ public class Menu {
 
     public LocalDateTime getMenuCreatedDate() {
         return menuCreatedDate;
-    }
-
-    public void setMenuCreatedDate(LocalDateTime menuCreatedDate) {
-        this.menuCreatedDate = menuCreatedDate;
     }
 
     public List<MealOfMenu> getMenu() {
