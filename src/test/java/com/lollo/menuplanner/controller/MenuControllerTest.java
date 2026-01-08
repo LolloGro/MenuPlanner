@@ -1,9 +1,14 @@
 package com.lollo.menuplanner.controller;
 
 import com.lollo.menuplanner.TestcontainersConfiguration;
-import com.lollo.menuplanner.dto.CompleteMealDto;
 import com.lollo.menuplanner.dto.MenuDto;
+import com.lollo.menuplanner.entity.Meal;
+import com.lollo.menuplanner.entity.MealOfMenu;
 import com.lollo.menuplanner.entity.MealType;
+import com.lollo.menuplanner.entity.Menu;
+import com.lollo.menuplanner.repository.MealRepository;
+import com.lollo.menuplanner.repository.MenuRepository;
+import com.lollo.menuplanner.service.MenuService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,9 +39,30 @@ class MenuControllerTest {
     private MockMvc mockMvc;
     @Autowired
     private ObjectMapper objectMapper;
+    @Autowired
+    private MenuRepository menuRepository;
+    @Autowired
+    private MenuService menuService;
+    @Autowired
+    private MealRepository mealRepository;
 
     @BeforeEach
     void setUp() {
+        mealRepository.deleteAll();
+        Meal soup = new Meal("Veggie soup", "Carrots", MealType.LUNCH, 60);
+        Meal meatballs = new Meal("Meatballs", "Meat", MealType.LUNCH, 60);
+        mealRepository.saveAll(List.of(soup, meatballs));
+
+        MealOfMenu mealOne = new MealOfMenu(10, "Soup");
+        MealOfMenu mealTwo = new MealOfMenu(20, "Potato");
+
+        List<MealOfMenu> meals = List.of(mealOne, mealTwo);
+
+        Menu menu = new Menu();
+        menu.setMenuName("Week one");
+        menu.setMenu(meals);
+
+        menuRepository.save(menu);
     }
 
     @Test
@@ -57,10 +83,10 @@ class MenuControllerTest {
     }
 
     public MenuDto createMenu(){
-        CompleteMealDto mealOne = new CompleteMealDto(1, "Meatballs", "meat", MealType.DINNER, 30);
-        CompleteMealDto mealTwo = new CompleteMealDto(2, "Carrot soup", "Carrot", MealType.DINNER, 45);
-        List<CompleteMealDto> meals = List.of(mealOne, mealTwo);
+        List<Meal> meals = mealRepository.findAll();
+        List<Integer> mealId = meals.stream()
+            .map(Meal::getId).toList();
 
-        return new MenuDto("Week one", meals);
+        return new MenuDto("Week two", mealId);
     }
 }
