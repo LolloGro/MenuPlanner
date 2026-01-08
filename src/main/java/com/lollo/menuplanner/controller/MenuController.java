@@ -10,6 +10,12 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+/**
+ * REST controller that manage menus.
+ * This controller exposes HTTP endpoints for the user to read, add, update and delete a menu.
+ * Validation and business logic is delegated to the MenuService.
+ */
+
 @RestController
 @RequestMapping("/api")
 public class MenuController {

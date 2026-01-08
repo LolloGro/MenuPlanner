@@ -10,6 +10,12 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+/**
+ * REST controller that manage meals.
+ * This controller exposes HTTP endpoints for the user to read, add, update and delete a meal.
+ * Validation and business logic is delegated to the MealService.
+ */
+
 @RestController
 @RequestMapping("/api")
 public class MealController {
@@ -23,6 +29,11 @@ public class MealController {
     @GetMapping("/meals")
     public ResponseEntity<List<ReadMealDto>>  getMeals() {
         return ResponseEntity.ok(mealService.getAllMeals());
+    }
+
+    @GetMapping("meals/{id}")
+    public ResponseEntity<ReadMealDto> getMeal(@PathVariable int id) {
+        return ResponseEntity.ok(mealService.getMeal(id));
     }
 
     @PostMapping("/meals")

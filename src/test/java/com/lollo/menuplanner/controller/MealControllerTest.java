@@ -71,6 +71,16 @@ class MealControllerTest{
     }
 
     @Test
+    void shouldReturnMealById() throws Exception{
+        List<ReadMealDto> listOfMeals = mealService.getAllMeals();
+
+        Integer id = listOfMeals.getFirst().id();
+
+        mockMvc.perform(get("/api/meals/{id}", id))
+            .andExpect(status().isOk());
+    }
+
+    @Test
     void shouldReturnStatusCreated() throws Exception{
         MealDto meal = new MealDto("Pulled pork", "pork", MealType.DINNER, 180);
 

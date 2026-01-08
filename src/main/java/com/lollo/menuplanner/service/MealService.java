@@ -27,6 +27,12 @@ public class MealService {
             .map(meal -> new ReadMealDto(meal.getId(), meal.getMealName(), meal.getMainIngredient(), meal.getMealType(), meal.getTime())).toList();
     }
 
+    public ReadMealDto getMeal(int id) {
+        Meal meal =  mealRepository.findById(id).orElseThrow(()->new NotFoundException("Meal with id "+id+" not found"));
+
+        return  new ReadMealDto(meal.getId(), meal.getMealName(), meal.getMainIngredient(), meal.getMealType(), meal.getTime());
+    }
+
     @Transactional
     public MealDto addMeal(MealDto mealDto) {
 
