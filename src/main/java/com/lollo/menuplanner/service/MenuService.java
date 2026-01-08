@@ -35,7 +35,8 @@ public class MenuService {
     }
 
     public ReadMenuDto getMenuById(int id) {
-        Menu menu = menuRepository.findById(id).orElseThrow(() -> new NotFoundException("Meal with id "+id+" not found"));
+        Menu menu = menuRepository.findById(id).orElseThrow(() -> new NotFoundException("Menu with id "+id+" not found"));
+
         return new ReadMenuDto(menu.getId(), menu.getMenuName(), menu.getMenu(), menu.getMenuCreatedDate());
     }
 
@@ -60,12 +61,18 @@ public class MenuService {
 
     }
 
+    @Transactional
+    public void deleteMenu(int id) {
+        Menu menu = menuRepository.findById(id).orElseThrow(() -> new NotFoundException("Menu with id "+id+" not found"));
+
+        menuRepository.delete(menu);
+    }
+
     /**
      * Method for reuse that finds meals by id.
      * Stores them in a map
      * Creates a List of MealOfMenu from saved map and the order from saved mealIds.
      */
-
     private void setMeny(Menu menu, MenuDto newMenu) {
         String menuName = capitalizeFirstLetter(newMenu.menuName());
 
