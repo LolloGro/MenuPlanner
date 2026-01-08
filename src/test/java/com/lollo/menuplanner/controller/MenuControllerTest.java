@@ -42,8 +42,6 @@ class MenuControllerTest {
     @Autowired
     private MenuRepository menuRepository;
     @Autowired
-    private MenuService menuService;
-    @Autowired
     private MealRepository mealRepository;
 
     @BeforeEach
@@ -66,8 +64,16 @@ class MenuControllerTest {
     }
 
     @Test
-    void getMenu() throws Exception {
+    void shouldReturnOkForGetAllMenus() throws Exception {
         mockMvc.perform(get("/api/menus"))
+            .andExpect(status().isOk());
+    }
+
+    @Test
+    void shouldReturnOkForGetMenyById() throws Exception {
+        int id = menuRepository.findAll().getFirst().getId();
+
+        mockMvc.perform(get("/api/menus/{id}", id))
             .andExpect(status().isOk());
     }
 

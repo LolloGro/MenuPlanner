@@ -8,6 +8,7 @@ import com.lollo.menuplanner.entity.Menu;
 import com.lollo.menuplanner.exception.NotFoundException;
 import com.lollo.menuplanner.repository.MealRepository;
 import com.lollo.menuplanner.repository.MenuRepository;
+import jakarta.validation.Valid;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,8 +34,39 @@ public class MenuService {
             .map(menu -> new ReadMenuDto(menu.getId(), menu.getMenuName(), menu.getMenu(), menu.getMenuCreatedDate())).toList();
     }
 
+    public ReadMenuDto getMenuById(int id) {
+        Menu menu = menuRepository.findById(id).orElseThrow(() -> new NotFoundException("Meal with id "+id+" not found"));
+        return new ReadMenuDto(menu.getId(), menu.getMenuName(), menu.getMenu(), menu.getMenuCreatedDate());
+    }
+
     @Transactional
     public ReadMenuDto addMenu(MenuDto newMenu) {
+
+        Menu menu =  new Menu();
+        setMeny(menu, newMenu);
+        menuRepository.save(menu);
+
+        return new ReadMenuDto(menu.getId(), menu.getMenuName(), menu.getMenu(), menu.getMenuCreatedDate());
+    }
+
+    @Transactional
+    public ReadMenuDto updateMenu(int id, @Valid MenuDto newMenu) {
+
+        Menu menu = menuRepository.findById(id).orElseThrow(() -> new NotFoundException("Menu not found"));
+        setMeny(menu, newMenu);
+        menuRepository.save(menu);
+
+        return new ReadMenuDto(menu.getId(), menu.getMenuName(), menu.getMenu(), menu.getMenuCreatedDate());
+
+    }
+
+    /**
+     * Method for reuse that finds meals by id.
+     * Stores them in a map
+     * Creates a List of MealOfMenu from saved map and the order from saved mealIds.
+     */
+
+    private void setMeny(Menu menu, MenuDto newMenu) {
         String menuName = capitalizeFirstLetter(newMenu.menuName());
 
         List<Meal> meals = mealRepository.findAllById(newMenu.mealId());
@@ -53,12 +85,8 @@ public class MenuService {
 
             }).toList();
 
-        Menu menuToSave =  new Menu();
-        menuToSave.setMenuName(menuName);
-        menuToSave.setMenu(mealsToMenu);
-
-        menuRepository.save(menuToSave);
-
-        return new ReadMenuDto(menuToSave.getId(), menuToSave.getMenuName(), menuToSave.getMenu(), menuToSave.getMenuCreatedDate());
+        menu.setMenuName(menuName);
+        menu.setMenu(mealsToMenu);
     }
+
 }

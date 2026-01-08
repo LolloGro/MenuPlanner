@@ -26,10 +26,21 @@ public class MenuController {
 
     }
 
+    @GetMapping("/menus/{id}")
+    public ResponseEntity<ReadMenuDto> getMenuById(@PathVariable int id) {
+        return ResponseEntity.status(HttpStatus.OK).body(menuService.getMenuById(id));
+    }
+
     @PostMapping("/menus")
     public ResponseEntity<ReadMenuDto> addMenus(@Valid @RequestBody MenuDto newMenu) {
          ReadMenuDto createdMenu = menuService.addMenu(newMenu);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(createdMenu);
+    }
+
+    @PutMapping("/menus/{id}")
+    public ResponseEntity<ReadMenuDto> updateMenus(@PathVariable int id, @Valid @RequestBody MenuDto newMenu) {
+        ReadMenuDto updatedMenu = menuService.updateMenu(id, newMenu);
+        return ResponseEntity.status(HttpStatus.OK).body(updatedMenu);
     }
 }
