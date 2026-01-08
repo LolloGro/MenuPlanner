@@ -1,7 +1,7 @@
 package com.lollo.menuplanner.controller;
 
 import com.lollo.menuplanner.TestcontainersConfiguration;
-import com.lollo.menuplanner.dto.CompleteMealDto;
+import com.lollo.menuplanner.dto.ReadMealDto;
 import com.lollo.menuplanner.entity.Ingredient;
 import com.lollo.menuplanner.dto.RecipeDto;
 import com.lollo.menuplanner.entity.Meal;
@@ -170,7 +170,7 @@ class RecipeControllerTest {
     }
 
     public int idForMeal(){
-        List<CompleteMealDto> listOfMeals = mealService.getAllMeals();
+        List<ReadMealDto> listOfMeals = mealService.getAllMeals();
 
         return listOfMeals.getFirst().id();
     }

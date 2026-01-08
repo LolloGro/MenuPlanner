@@ -1,6 +1,6 @@
 package com.lollo.menuplanner.service;
 
-import com.lollo.menuplanner.dto.CompleteMealDto;
+import com.lollo.menuplanner.dto.ReadMealDto;
 import com.lollo.menuplanner.dto.MealDto;
 import com.lollo.menuplanner.entity.Meal;
 import com.lollo.menuplanner.exception.DuplicateResourcesException;
@@ -22,9 +22,9 @@ public class MealService {
         this.mealRepository = mealRepository;
     }
 
-    public List<CompleteMealDto> getAllMeals() {
+    public List<ReadMealDto> getAllMeals() {
         return mealRepository.findAll().stream()
-            .map(meal -> new CompleteMealDto(meal.getId(), meal.getMealName(), meal.getMainIngredient(), meal.getMealType(), meal.getTime())).toList();
+            .map(meal -> new ReadMealDto(meal.getId(), meal.getMealName(), meal.getMainIngredient(), meal.getMealType(), meal.getTime())).toList();
     }
 
     @Transactional

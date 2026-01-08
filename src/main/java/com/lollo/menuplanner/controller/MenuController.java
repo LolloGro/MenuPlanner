@@ -1,6 +1,6 @@
 package com.lollo.menuplanner.controller;
 
-import com.lollo.menuplanner.dto.ListOfMenuDto;
+import com.lollo.menuplanner.dto.ReadMenuDto;
 import com.lollo.menuplanner.dto.MenuDto;
 import com.lollo.menuplanner.service.MenuService;
 import jakarta.validation.Valid;
@@ -21,14 +21,14 @@ public class MenuController {
     }
 
     @GetMapping("/menus")
-    public ResponseEntity<List<ListOfMenuDto>> getMenus() {
-        return ResponseEntity.ok(menuService.getAllMenus());
+    public ResponseEntity<List<ReadMenuDto>> getMenus() {
+        return ResponseEntity.status(HttpStatus.OK).body(menuService.getAllMenus());
 
     }
 
     @PostMapping("/menus")
-    public ResponseEntity<ListOfMenuDto> addMenus(@Valid @RequestBody MenuDto newMenu) {
-         ListOfMenuDto createdMenu = menuService.addMenu(newMenu);
+    public ResponseEntity<ReadMenuDto> addMenus(@Valid @RequestBody MenuDto newMenu) {
+         ReadMenuDto createdMenu = menuService.addMenu(newMenu);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(createdMenu);
     }

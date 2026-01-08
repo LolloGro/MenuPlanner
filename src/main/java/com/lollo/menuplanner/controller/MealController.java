@@ -1,6 +1,6 @@
 package com.lollo.menuplanner.controller;
 
-import com.lollo.menuplanner.dto.CompleteMealDto;
+import com.lollo.menuplanner.dto.ReadMealDto;
 import com.lollo.menuplanner.dto.MealDto;
 import com.lollo.menuplanner.service.MealService;
 import jakarta.validation.Valid;
@@ -21,7 +21,7 @@ public class MealController {
     }
 
     @GetMapping("/meals")
-    public ResponseEntity<List<CompleteMealDto>>  getMeals() {
+    public ResponseEntity<List<ReadMealDto>>  getMeals() {
         return ResponseEntity.ok(mealService.getAllMeals());
     }
 
