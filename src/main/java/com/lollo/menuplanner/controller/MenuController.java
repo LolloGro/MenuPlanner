@@ -5,7 +5,6 @@ import com.lollo.menuplanner.dto.MenuDto;
 import com.lollo.menuplanner.service.MenuService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -27,32 +26,32 @@ public class MenuController {
     }
 
     @GetMapping("/menus")
-    public ResponseEntity<List<ReadMenuDto>> getMenus() {
-        return ResponseEntity.status(HttpStatus.OK).body(menuService.getAllMenus());
-
+    @ResponseStatus(HttpStatus.OK)
+    public List<ReadMenuDto> getMenus() {
+        return menuService.getAllMenus();
     }
 
     @GetMapping("/menus/{id}")
-    public ResponseEntity<ReadMenuDto> getMenuById(@PathVariable int id) {
-        return ResponseEntity.status(HttpStatus.OK).body(menuService.getMenuById(id));
+    @ResponseStatus(HttpStatus.OK)
+    public ReadMenuDto getMenuById(@PathVariable int id) {
+        return menuService.getMenuById(id);
     }
 
     @PostMapping("/menus")
-    public ResponseEntity<ReadMenuDto> addMenus(@Valid @RequestBody MenuDto newMenu) {
-         ReadMenuDto createdMenu = menuService.addMenu(newMenu);
-
-        return ResponseEntity.status(HttpStatus.CREATED).body(createdMenu);
+    @ResponseStatus(HttpStatus.CREATED)
+    public ReadMenuDto addMenus(@Valid @RequestBody MenuDto newMenu) {
+        return menuService.addMenu(newMenu);
     }
 
     @PutMapping("/menus/{id}")
-    public ResponseEntity<ReadMenuDto> updateMenus(@PathVariable int id, @Valid @RequestBody MenuDto newMenu) {
-        ReadMenuDto updatedMenu = menuService.updateMenu(id, newMenu);
-        return ResponseEntity.status(HttpStatus.OK).body(updatedMenu);
+    @ResponseStatus(HttpStatus.OK)
+    public ReadMenuDto updateMenus(@PathVariable int id, @Valid @RequestBody MenuDto newMenu) {
+        return menuService.updateMenu(id, newMenu);
     }
 
     @DeleteMapping("/menus/{id}")
-    public ResponseEntity<Void> deleteMenus(@PathVariable int id) {
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteMenus(@PathVariable int id) {
         menuService.deleteMenu(id);
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }

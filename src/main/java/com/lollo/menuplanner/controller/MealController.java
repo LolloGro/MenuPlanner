@@ -5,7 +5,6 @@ import com.lollo.menuplanner.dto.MealDto;
 import com.lollo.menuplanner.service.MealService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -27,31 +26,33 @@ public class MealController {
     }
 
     @GetMapping("/meals")
-    public ResponseEntity<List<ReadMealDto>>  getMeals() {
-        return ResponseEntity.ok(mealService.getAllMeals());
+    @ResponseStatus(HttpStatus.OK)
+    public List<ReadMealDto> getMeals() {
+        return mealService.getAllMeals();
     }
 
     @GetMapping("meals/{id}")
-    public ResponseEntity<ReadMealDto> getMeal(@PathVariable int id) {
-        return ResponseEntity.ok(mealService.getMeal(id));
+    @ResponseStatus(HttpStatus.OK)
+    public ReadMealDto getMeal(@PathVariable int id) {
+        return mealService.getMeal(id);
     }
 
     @PostMapping("/meals")
-    ResponseEntity<MealDto> addMeal(@Valid @RequestBody MealDto mealDto) {
-        MealDto meal =  mealService.addMeal(mealDto);
-       return ResponseEntity.status(HttpStatus.CREATED).body(meal);
+    @ResponseStatus(HttpStatus.CREATED)
+    public MealDto addMeal(@Valid @RequestBody MealDto mealDto) {
+       return mealService.addMeal(mealDto);
     }
 
     @PutMapping("/meals/{id}")
-    ResponseEntity<MealDto> updateMeal(@PathVariable int id, @Valid @RequestBody MealDto mealDto) {
-        MealDto updatedMeal =  mealService.updateMeal(id, mealDto);
-        return ResponseEntity.status(HttpStatus.OK).body(updatedMeal);
+    @ResponseStatus(HttpStatus.OK)
+    public MealDto updateMeal(@PathVariable int id, @Valid @RequestBody MealDto mealDto) {
+        return mealService.updateMeal(id, mealDto);
     }
 
     @DeleteMapping("/meals/{id}")
-    ResponseEntity<Void> deleteMeal(@PathVariable int id){
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteMeal(@PathVariable int id){
         mealService.deleteMeal(id);
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
 }

@@ -4,7 +4,6 @@ import com.lollo.menuplanner.dto.RecipeDto;
 import com.lollo.menuplanner.service.RecipeService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -24,21 +23,21 @@ public class RecipeController {
     }
 
     @PostMapping("/recipes")
-    public ResponseEntity<RecipeDto> addRecipe(@PathVariable Integer id, @Valid @RequestBody RecipeDto recipe) {
-        RecipeDto savedRecipe = recipeService.createRecipe(recipe, id);
-        return ResponseEntity.status(HttpStatus.CREATED).body(savedRecipe);
+    @ResponseStatus(HttpStatus.CREATED)
+    public RecipeDto addRecipe(@PathVariable Integer id, @Valid @RequestBody RecipeDto recipe) {
+        return recipeService.createRecipe(recipe, id);
     }
 
     @PutMapping("/recipes")
-    public ResponseEntity<RecipeDto> updateRecipe(@PathVariable Integer id, @Valid @RequestBody RecipeDto recipe) {
-        RecipeDto updatedRecipe = recipeService.updateRecipe(recipe, id);
-        return ResponseEntity.status(HttpStatus.OK).body(updatedRecipe);
+    @ResponseStatus(HttpStatus.OK)
+    public RecipeDto updateRecipe(@PathVariable Integer id, @Valid @RequestBody RecipeDto recipe) {
+        return recipeService.updateRecipe(recipe, id);
     }
 
     @DeleteMapping("/recipes")
-    public ResponseEntity<Void> deleteRecipe(@PathVariable Integer id) {
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteRecipe(@PathVariable Integer id) {
         recipeService.deleteRecipe(id);
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
 }
