@@ -31,33 +31,33 @@ public class MenuService {
 
     public List<ReadMenuDto> getAllMenus() {
         return menuRepository.findAll().stream()
-            .map(menu -> new ReadMenuDto(menu.getId(), menu.getMenuName(), menu.getMenu(), menu.getMenuCreatedDate())).toList();
+            .map(this::toReadMenuDto).toList();
     }
 
     public ReadMenuDto getMenuById(int id) {
         Menu menu = menuRepository.findById(id).orElseThrow(() -> new NotFoundException("Menu with id "+id+" not found"));
 
-        return new ReadMenuDto(menu.getId(), menu.getMenuName(), menu.getMenu(), menu.getMenuCreatedDate());
+        return toReadMenuDto(menu);
     }
 
     @Transactional
-    public ReadMenuDto addMenu(MenuDto newMenu) {
+    public ReadMenuDto addMenu(@Valid MenuDto newMenu) {
 
         Menu menu =  new Menu();
         setMenu(menu, newMenu);
         menuRepository.save(menu);
 
-        return new ReadMenuDto(menu.getId(), menu.getMenuName(), menu.getMenu(), menu.getMenuCreatedDate());
+        return toReadMenuDto(menu);
     }
 
     @Transactional
     public ReadMenuDto updateMenu(int id, @Valid MenuDto newMenu) {
 
-        Menu menu = menuRepository.findById(id).orElseThrow(() -> new NotFoundException("Menu not found"));
+        Menu menu = menuRepository.findById(id).orElseThrow(() -> new NotFoundException("Menu not with "+id+" not found"));
         setMenu(menu, newMenu);
         menuRepository.save(menu);
 
-        return new ReadMenuDto(menu.getId(), menu.getMenuName(), menu.getMenu(), menu.getMenuCreatedDate());
+        return toReadMenuDto(menu);
 
     }
 
@@ -68,18 +68,21 @@ public class MenuService {
         menuRepository.delete(menu);
     }
 
+     private ReadMenuDto toReadMenuDto(Menu menu) {
+        return new ReadMenuDto(menu.getId(), menu.getMenuName(), menu.getMenu(), menu.getMenuCreatedDate());
+     }
     /**
      * Method for reuse that finds meals by id.
      * Stores them in a map
      * Creates a List of MealOfMenu from saved map and the order from saved mealIds.
      */
     private void setMenu(Menu menu, MenuDto newMenu) {
-        String menuName = capitalizeFirstLetter(newMenu.menuName());
+        String menuName = capitalizeFirstLetter(newMenu.menuName().trim());
 
         List<Meal> meals = mealRepository.findAllById(newMenu.mealIds());
 
         if(meals.size() != newMenu.mealIds().size()) {
-            throw new NotFoundException("Meals not found");
+            throw new NotFoundException("All meals not found");
         }
 
         Map<Integer, Meal> mealsToAdd = meals.stream().collect(Collectors.toMap(Meal::getId, meal -> meal));

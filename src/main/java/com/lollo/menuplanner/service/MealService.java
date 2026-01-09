@@ -36,7 +36,7 @@ public class MealService {
     @Transactional
     public MealDto addMeal(MealDto mealDto) {
 
-        String nameToUpperCase = capitalizeFirstLetter(mealDto.mealName());
+        String nameToUpperCase = capitalizeFirstLetter(mealDto.mealName().trim());
 
         if(mealRepository.findMealByMealName(nameToUpperCase).isPresent()){
             throw new DuplicateResourcesException("Meal with name " + mealDto.mealName() + " already exists");
@@ -53,7 +53,7 @@ public class MealService {
     public MealDto updateMeal(int id, MealDto mealDto) {
         Meal mealToUpdate = mealRepository.findById(id).orElseThrow(() -> new NotFoundException("Meal with id "+id+" not found"));
 
-        String nameToUpperCase = capitalizeFirstLetter(mealDto.mealName());
+        String nameToUpperCase = capitalizeFirstLetter(mealDto.mealName().trim());
 
         if(mealRepository.findMealByMealName(nameToUpperCase).filter(meal -> !meal.getId().equals(id)).isPresent()){
             throw new DuplicateResourcesException("Meal with name " + mealDto.mealName() + " already exists");
