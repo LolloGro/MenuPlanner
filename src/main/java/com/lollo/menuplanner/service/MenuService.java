@@ -8,7 +8,6 @@ import com.lollo.menuplanner.entity.Menu;
 import com.lollo.menuplanner.exception.NotFoundException;
 import com.lollo.menuplanner.repository.MealRepository;
 import com.lollo.menuplanner.repository.MenuRepository;
-import jakarta.validation.Valid;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -41,7 +40,7 @@ public class MenuService {
     }
 
     @Transactional
-    public ReadMenuDto addMenu(@Valid MenuDto newMenu) {
+    public ReadMenuDto addMenu(MenuDto newMenu) {
 
         Menu menu =  new Menu();
         setMenu(menu, newMenu);
@@ -51,7 +50,7 @@ public class MenuService {
     }
 
     @Transactional
-    public ReadMenuDto updateMenu(int id, @Valid MenuDto newMenu) {
+    public ReadMenuDto updateMenu(int id, MenuDto newMenu) {
 
         Menu menu = menuRepository.findById(id).orElseThrow(() -> new NotFoundException("Menu not with "+id+" not found"));
         setMenu(menu, newMenu);
@@ -73,15 +72,18 @@ public class MenuService {
      }
     /**
      * Method for reuse that finds meals by id.
+     * Distinct count handles duplicate meals
      * Stores them in a map
      * Creates a List of MealOfMenu from saved map and the order from saved mealIds.
      */
     private void setMenu(Menu menu, MenuDto newMenu) {
         String menuName = capitalizeFirstLetter(newMenu.menuName().trim());
 
+        List<Integer> idForNewMeal = newMenu.mealIds();
+        long distinctCount = idForNewMeal.stream().distinct().count();
         List<Meal> meals = mealRepository.findAllById(newMenu.mealIds());
 
-        if(meals.size() != newMenu.mealIds().size()) {
+        if(meals.size() != distinctCount) {
             throw new NotFoundException("All meals not found");
         }
 
