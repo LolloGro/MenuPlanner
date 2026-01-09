@@ -1,6 +1,6 @@
 package com.lollo.menuplanner.service;
 
-import com.lollo.menuplanner.dto.CompleteMealDto;
+import com.lollo.menuplanner.dto.ReadMealDto;
 import com.lollo.menuplanner.dto.MealDto;
 import com.lollo.menuplanner.entity.Meal;
 import com.lollo.menuplanner.exception.DuplicateResourcesException;
@@ -22,15 +22,21 @@ public class MealService {
         this.mealRepository = mealRepository;
     }
 
-    public List<CompleteMealDto> getAllMeals() {
+    public List<ReadMealDto> getAllMeals() {
         return mealRepository.findAll().stream()
-            .map(meal -> new CompleteMealDto(meal.getId(), meal.getMealName(), meal.getMainIngredient(), meal.getMealType(), meal.getTime())).toList();
+            .map(meal -> new ReadMealDto(meal.getId(), meal.getMealName(), meal.getMainIngredient(), meal.getMealType(), meal.getTime())).toList();
+    }
+
+    public ReadMealDto getMeal(int id) {
+        Meal meal =  mealRepository.findById(id).orElseThrow(()->new NotFoundException("Meal with id "+id+" not found"));
+
+        return  new ReadMealDto(meal.getId(), meal.getMealName(), meal.getMainIngredient(), meal.getMealType(), meal.getTime());
     }
 
     @Transactional
     public MealDto addMeal(MealDto mealDto) {
 
-        String nameToUpperCase = capitalizeFirstLetter(mealDto.mealName());
+        String nameToUpperCase = capitalizeFirstLetter(mealDto.mealName().trim());
 
         if(mealRepository.findMealByMealName(nameToUpperCase).isPresent()){
             throw new DuplicateResourcesException("Meal with name " + mealDto.mealName() + " already exists");
@@ -47,7 +53,7 @@ public class MealService {
     public MealDto updateMeal(int id, MealDto mealDto) {
         Meal mealToUpdate = mealRepository.findById(id).orElseThrow(() -> new NotFoundException("Meal with id "+id+" not found"));
 
-        String nameToUpperCase = capitalizeFirstLetter(mealDto.mealName());
+        String nameToUpperCase = capitalizeFirstLetter(mealDto.mealName().trim());
 
         if(mealRepository.findMealByMealName(nameToUpperCase).filter(meal -> !meal.getId().equals(id)).isPresent()){
             throw new DuplicateResourcesException("Meal with name " + mealDto.mealName() + " already exists");

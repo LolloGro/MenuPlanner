@@ -1,7 +1,7 @@
 package com.lollo.menuplanner.controller;
 
 import com.lollo.menuplanner.TestcontainersConfiguration;
-import com.lollo.menuplanner.dto.CompleteMealDto;
+import com.lollo.menuplanner.dto.ReadMealDto;
 import com.lollo.menuplanner.dto.MealDto;
 import com.lollo.menuplanner.entity.Meal;
 import com.lollo.menuplanner.entity.MealType;
@@ -64,10 +64,20 @@ class MealControllerTest{
             .andReturn();
 
         String result = response.getResponse().getContentAsString();
-        List<CompleteMealDto> meal = objectMapper.readValue(result, new TypeReference<>(){});
+        List<ReadMealDto> meal = objectMapper.readValue(result, new TypeReference<>(){});
 
         assertNotNull(meal);
         assertEquals(1, meal.size());
+    }
+
+    @Test
+    void shouldReturnMealById() throws Exception{
+        List<ReadMealDto> listOfMeals = mealService.getAllMeals();
+
+        Integer id = listOfMeals.getFirst().id();
+
+        mockMvc.perform(get("/api/meals/{id}", id))
+            .andExpect(status().isOk());
     }
 
     @Test
@@ -106,7 +116,7 @@ class MealControllerTest{
 
     @Test
     void shouldUpdatedMeal() throws Exception {
-        List<CompleteMealDto> listOfMeals = mealService.getAllMeals();
+        List<ReadMealDto> listOfMeals = mealService.getAllMeals();
 
         Integer id = listOfMeals.getFirst().id();
 
@@ -134,7 +144,7 @@ class MealControllerTest{
 
     @Test
     void shouldDeleteMeal() throws Exception {
-        List<CompleteMealDto> listOfMeals = mealService.getAllMeals();
+        List<ReadMealDto> listOfMeals = mealService.getAllMeals();
 
         Integer id = listOfMeals.getFirst().id();
 
