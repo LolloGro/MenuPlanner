@@ -31,7 +31,7 @@ public class MealController {
         return mealService.getAllMeals();
     }
 
-    @GetMapping("meals/{id}")
+    @GetMapping("/meals/{id}")
     @ResponseStatus(HttpStatus.OK)
     public ReadMealDto getMeal(@PathVariable int id) {
         return mealService.getMeal(id);

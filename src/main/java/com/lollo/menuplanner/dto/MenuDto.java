@@ -9,5 +9,5 @@ public record MenuDto(
     @NotBlank
     String menuName,
     @NotNull
-    List<Integer> mealId) {
+    List<Integer> mealIds) {
 }

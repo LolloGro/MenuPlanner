@@ -39,19 +39,19 @@ public class MenuController {
 
     @PostMapping("/menus")
     @ResponseStatus(HttpStatus.CREATED)
-    public ReadMenuDto addMenus(@Valid @RequestBody MenuDto newMenu) {
+    public ReadMenuDto addMenu(@Valid @RequestBody MenuDto newMenu) {
         return menuService.addMenu(newMenu);
     }
 
     @PutMapping("/menus/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public ReadMenuDto updateMenus(@PathVariable int id, @Valid @RequestBody MenuDto newMenu) {
+    public ReadMenuDto updateMenu(@PathVariable int id, @Valid @RequestBody MenuDto newMenu) {
         return menuService.updateMenu(id, newMenu);
     }
-
+    
     @DeleteMapping("/menus/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteMenus(@PathVariable int id) {
+    public void deleteMenu(@PathVariable int id) {
         menuService.deleteMenu(id);
     }
 }

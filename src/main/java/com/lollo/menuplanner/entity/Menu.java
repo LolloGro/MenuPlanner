@@ -20,6 +20,7 @@ public class Menu {
     @Column(nullable = false)
     private String menuName;
     @CreationTimestamp
+    @Column(updatable = false)
     private LocalDateTime menuCreatedDate;
     @ElementCollection
     @CollectionTable(name = "menu_meals", joinColumns = @JoinColumn(name = "menu_id"))

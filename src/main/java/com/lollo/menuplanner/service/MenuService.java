@@ -44,7 +44,7 @@ public class MenuService {
     public ReadMenuDto addMenu(MenuDto newMenu) {
 
         Menu menu =  new Menu();
-        setMeny(menu, newMenu);
+        setMenu(menu, newMenu);
         menuRepository.save(menu);
 
         return new ReadMenuDto(menu.getId(), menu.getMenuName(), menu.getMenu(), menu.getMenuCreatedDate());
@@ -54,7 +54,7 @@ public class MenuService {
     public ReadMenuDto updateMenu(int id, @Valid MenuDto newMenu) {
 
         Menu menu = menuRepository.findById(id).orElseThrow(() -> new NotFoundException("Menu not found"));
-        setMeny(menu, newMenu);
+        setMenu(menu, newMenu);
         menuRepository.save(menu);
 
         return new ReadMenuDto(menu.getId(), menu.getMenuName(), menu.getMenu(), menu.getMenuCreatedDate());
@@ -73,18 +73,18 @@ public class MenuService {
      * Stores them in a map
      * Creates a List of MealOfMenu from saved map and the order from saved mealIds.
      */
-    private void setMeny(Menu menu, MenuDto newMenu) {
+    private void setMenu(Menu menu, MenuDto newMenu) {
         String menuName = capitalizeFirstLetter(newMenu.menuName());
 
-        List<Meal> meals = mealRepository.findAllById(newMenu.mealId());
+        List<Meal> meals = mealRepository.findAllById(newMenu.mealIds());
 
-        if(meals.size() != newMenu.mealId().size()) {
+        if(meals.size() != newMenu.mealIds().size()) {
             throw new NotFoundException("Meals not found");
         }
 
         Map<Integer, Meal> mealsToAdd = meals.stream().collect(Collectors.toMap(Meal::getId, meal -> meal));
 
-        List<MealOfMenu> mealsToMenu = newMenu.mealId().stream()
+        List<MealOfMenu> mealsToMenu = newMenu.mealIds().stream()
             .map(mealId -> {
                 Meal meal = mealsToAdd.get(mealId);
                 return new MealOfMenu(

@@ -54,6 +54,7 @@ class MenuControllerTest {
         Meal meatballs = new Meal("Meatballs", "Meat", MealType.LUNCH, 60);
         mealRepository.saveAll(List.of(soup, meatballs));
 
+        menuRepository.deleteAll();
         MealOfMenu mealOne = new MealOfMenu(10, "Soup");
         MealOfMenu mealTwo = new MealOfMenu(20, "Potato");
 
@@ -73,7 +74,7 @@ class MenuControllerTest {
     }
 
     @Test
-    void shouldReturnOkForGetMenyById() throws Exception {
+    void shouldReturnOkForGetMenuById() throws Exception {
         List<ReadMenuDto> listOfMenus = menuService.getAllMenus();
 
         Integer id = listOfMenus.getFirst().id();
