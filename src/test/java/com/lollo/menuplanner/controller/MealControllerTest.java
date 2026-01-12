@@ -1,5 +1,7 @@
 package com.lollo.menuplanner.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.lollo.menuplanner.TestcontainersConfiguration;
 import com.lollo.menuplanner.dto.ReadMealDto;
 import com.lollo.menuplanner.dto.MealDto;
@@ -18,8 +20,6 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
-import tools.jackson.core.type.TypeReference;
-import tools.jackson.databind.ObjectMapper;
 
 import java.util.List;
 
@@ -41,9 +41,8 @@ class MealControllerTest{
     @Autowired
     private MockMvc mockMvc;
     @Autowired
-    private ObjectMapper objectMapper;
-    @Autowired
     private MealService mealService;
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
     @BeforeEach
     void setUp() {
