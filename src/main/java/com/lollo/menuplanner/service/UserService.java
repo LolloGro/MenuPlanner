@@ -4,7 +4,8 @@ import com.lollo.menuplanner.entity.Role;
 import com.lollo.menuplanner.entity.User;
 import com.lollo.menuplanner.repository.UserRepository;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Optional;
 
 @Service
 public class UserService {
@@ -15,8 +16,7 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    @Transactional
-    public void CreateUser(String name, String email, String provider, String providerId){
+    public User createUser(String name, String email, String provider, String providerId){
         User newUser = new User();
 
         newUser.setName(name);
@@ -24,11 +24,11 @@ public class UserService {
         newUser.setRole(Role.USER);
         newUser.setProvider(provider);
         newUser.setProviderId(providerId);
-        userRepository.save(newUser);
+         return userRepository.save(newUser);
     }
 
-    public User findUserByProviderId(String providerId){
-        return userRepository.findUserByProviderId(providerId).orElse(null);
+    public Optional<User> findUserByProviderId(String providerId){
+        return userRepository.findUserByProviderId(providerId);
     }
 
     //public deleteUser(){}

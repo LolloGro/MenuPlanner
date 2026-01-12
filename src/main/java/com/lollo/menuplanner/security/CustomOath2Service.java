@@ -1,6 +1,5 @@
 package com.lollo.menuplanner.security;
 
-import com.lollo.menuplanner.entity.User;
 import com.lollo.menuplanner.service.UserService;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
@@ -19,6 +18,7 @@ public class CustomOath2Service extends DefaultOAuth2UserService {
     }
 
     @Transactional
+    @Override
     public OAuth2User loadUser(OAuth2UserRequest user) throws OAuth2AuthenticationException {
         OAuth2User oAuth2User = super.loadUser(user);
 
@@ -27,10 +27,15 @@ public class CustomOath2Service extends DefaultOAuth2UserService {
         String provider = user.getClientRegistration().getRegistrationId();
         String providerId = oAuth2User.getAttribute("sub");
 
-        User checkForUser = userService.findUserByProviderId(providerId);
+        if(providerId == null){
+            throw new OAuth2AuthenticationException("Provider not found");
+        }
 
-        if(checkForUser == null){
-        userService.CreateUser(name, email, provider, providerId);
+        try{
+            userService.findUserByProviderId(providerId)
+                .orElseGet(() -> userService.createUser(name, email, provider, providerId));
+        } catch (Exception e) {
+            throw new OAuth2AuthenticationException("Could not create user");
         }
 
         return oAuth2User;
