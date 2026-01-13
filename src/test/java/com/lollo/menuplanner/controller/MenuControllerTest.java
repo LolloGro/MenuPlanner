@@ -1,6 +1,7 @@
 package com.lollo.menuplanner.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.lollo.menuplanner.TestAuditorConfig;
 import com.lollo.menuplanner.TestcontainersConfiguration;
 import com.lollo.menuplanner.dto.MenuDto;
 import com.lollo.menuplanner.dto.ReadMenuDto;
@@ -30,10 +31,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ActiveProfiles("test")
-@Import(TestcontainersConfiguration.class)
+@Import({TestcontainersConfiguration.class, TestAuditorConfig.class})
 @AutoConfigureMockMvc
 @SpringBootTest
-@WithMockUser
+@WithMockUser(username = "test")
 class MenuControllerTest {
 
     @Autowired

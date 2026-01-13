@@ -2,6 +2,7 @@ package com.lollo.menuplanner.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.lollo.menuplanner.TestAuditorConfig;
 import com.lollo.menuplanner.TestcontainersConfiguration;
 import com.lollo.menuplanner.dto.ReadMealDto;
 import com.lollo.menuplanner.dto.MealDto;
@@ -30,10 +31,10 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @ActiveProfiles("test")
-@Import(TestcontainersConfiguration.class)
+@Import({TestcontainersConfiguration.class, TestAuditorConfig.class})
 @AutoConfigureMockMvc
 @SpringBootTest
-@WithMockUser
+@WithMockUser(username = "test")
 class MealControllerTest{
 
     @Autowired
@@ -47,7 +48,11 @@ class MealControllerTest{
     @BeforeEach
     void setUp() {
         mealRepository.deleteAll();
-        Meal meal = new Meal("Veggie soup", "Carrots", MealType.LUNCH, 60);
+        Meal meal = new Meal();
+        meal.setMealName("Veggie soup");
+        meal.setMainIngredient("Carrots");
+        meal.setMealType(MealType.LUNCH);
+        meal.setTime(60);
         mealRepository.save(meal);
     }
 
@@ -58,7 +63,7 @@ class MealControllerTest{
     }
 
     @Test
-    void shouldReturnAllMeals() throws Exception{
+    void shouldReturnAllMealsForLoggedInUser() throws Exception{
         MvcResult response = this.mockMvc.perform(get("/api/meals"))
             .andReturn();
 
