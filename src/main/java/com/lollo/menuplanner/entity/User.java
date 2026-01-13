@@ -3,6 +3,7 @@ package com.lollo.menuplanner.entity;
 import jakarta.persistence.*;
 
 @Entity
+@Table(name="app_user")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -10,14 +11,14 @@ public class User {
     private Integer id;
     @Column(nullable = false)
     private String name;
-    @Column(nullable = false)
+    @Column(nullable = false,  unique = true)
     private String email;
-    @Enumerated
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Role role;
     @Column(nullable = false)
     private String provider;
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String providerId;
 
     public User(){}
