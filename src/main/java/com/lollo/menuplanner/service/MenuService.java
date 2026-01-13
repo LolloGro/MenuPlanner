@@ -54,7 +54,7 @@ public class MenuService {
     @Transactional
     public ReadMenuDto updateMenu(int id, MenuDto newMenu) {
 
-        Menu menu = menuRepository.findByIdAndCreatedBy(id, loggedInUser.getProviderId()).orElseThrow(() -> new NotFoundException("Menu not with "+id+" not found"));
+        Menu menu = menuRepository.findByIdAndCreatedBy(id, loggedInUser.getProviderId()).orElseThrow(() -> new NotFoundException("Menu with "+id+" not found"));
         setMenu(menu, newMenu);
         menuRepository.save(menu);
 

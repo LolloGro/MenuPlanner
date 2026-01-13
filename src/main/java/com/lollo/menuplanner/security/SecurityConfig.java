@@ -8,10 +8,10 @@ import org.springframework.security.web.SecurityFilterChain;
 @Configuration
 public class SecurityConfig {
 
-    private final CustomOath2Service  customOath2Service;
+    private final CustomOAuth2Service customOAuth2Service;
 
-    public SecurityConfig(final CustomOath2Service customOath2Service) {
-        this.customOath2Service = customOath2Service;
+    public SecurityConfig(final CustomOAuth2Service customOAuth2Service) {
+        this.customOAuth2Service = customOAuth2Service;
     }
 
     //Hantera endpoints för meal och menu
@@ -22,7 +22,7 @@ public class SecurityConfig {
                     .requestMatchers("/api/**").authenticated()
                     .requestMatchers("/", "/login", "/errors", "/css/**", "/js/**").permitAll())
             .oauth2Login(oauth -> oauth
-                .userInfoEndpoint(user -> user.userService(customOath2Service)))
+                .userInfoEndpoint(user -> user.userService(customOAuth2Service)))
             .logout(logout -> logout.logoutSuccessUrl("/"))
             .csrf(csrf -> csrf.disable())
             .build();

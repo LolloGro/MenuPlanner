@@ -9,11 +9,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-public class CustomOath2Service extends DefaultOAuth2UserService {
+public class CustomOAuth2Service extends DefaultOAuth2UserService {
 
     private final UserService userService;
 
-    public CustomOath2Service(UserService userService) {
+    public CustomOAuth2Service(UserService userService) {
         this.userService = userService;
     }
 
