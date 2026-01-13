@@ -2,12 +2,15 @@ package com.lollo.menuplanner.entity;
 
 import jakarta.persistence.*;
 import org.hibernate.proxy.HibernateProxy;
+import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 @Entity
+@EntityListeners(AuditingEntityListener.class)
 @Table(name = "recipe")
 public class Recipe {
 
@@ -15,6 +18,9 @@ public class Recipe {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false)
     private Integer id;
+    @CreatedBy
+    @Column(nullable = false, updatable = false)
+    private String createdBy;
     @OneToOne
     @JoinColumn(name = "meal_id", nullable = false,  unique = true)
     private Meal meal;
@@ -31,6 +37,14 @@ public class Recipe {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public String getCreatedBy() {
+        return createdBy;
+    }
+
+    public void setCreatedBy(String createdBy) {
+        this.createdBy = createdBy;
     }
 
     public Meal getMeal() {

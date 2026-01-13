@@ -2,6 +2,8 @@ package com.lollo.menuplanner.entity;
 
 import jakarta.persistence.*;
 import org.hibernate.proxy.HibernateProxy;
+import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.util.Objects;
 
@@ -9,11 +11,15 @@ import static com.lollo.menuplanner.util.Capitalize.capitalizeFirstLetter;
 
 @Entity
 @Table(name = "meal")
+@EntityListeners(AuditingEntityListener.class)
 public class Meal {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false)
     private Integer id;
+    @CreatedBy
+    @Column(nullable = false, updatable = false)
+    private String createdBy;
     @Column(nullable = false, unique = true)
     private String mealName;
     @Column(nullable = false)
@@ -41,6 +47,10 @@ public class Meal {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public String getCreatedBy() {
+        return createdBy;
     }
 
     public String getMealName() {
