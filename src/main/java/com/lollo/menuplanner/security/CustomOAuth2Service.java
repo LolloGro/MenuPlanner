@@ -28,14 +28,14 @@ public class CustomOAuth2Service extends DefaultOAuth2UserService {
         String providerId = oAuth2User.getAttribute("sub");
 
         if(providerId == null){
-            throw new OAuth2AuthenticationException("Provider not found");
+            throw new OAuth2AuthenticationException("Provider id not found");
         }
 
         try{
             userService.findUserByProviderId(providerId)
                 .orElseGet(() -> userService.createUser(name, email, provider, providerId));
         } catch (Exception e) {
-            throw new OAuth2AuthenticationException("Could not create user");
+            throw new OAuth2AuthenticationException("Could not create user: "+e.getMessage());
         }
 
         return oAuth2User;
