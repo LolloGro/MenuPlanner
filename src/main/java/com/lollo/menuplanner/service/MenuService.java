@@ -22,19 +22,21 @@ public class MenuService {
 
     private final MenuRepository menuRepository;
     private final MealRepository mealRepository;
+    private final LoggedInUser loggedInUser;
 
-    public MenuService(MenuRepository menuRepository,  MealRepository mealRepository) {
+    public MenuService(MenuRepository menuRepository,  MealRepository mealRepository, LoggedInUser loggedInUser) {
         this.menuRepository = menuRepository;
         this.mealRepository = mealRepository;
+        this.loggedInUser = loggedInUser;
     }
 
     public List<ReadMenuDto> getAllMenus() {
-        return menuRepository.findAll().stream()
+        return menuRepository.findByCreatedBy(loggedInUser.getProviderId()).stream()
             .map(this::toReadMenuDto).toList();
     }
 
     public ReadMenuDto getMenuById(int id) {
-        Menu menu = menuRepository.findById(id).orElseThrow(() -> new NotFoundException("Menu with id "+id+" not found"));
+        Menu menu = menuRepository.findByIdAndCreatedBy(id, loggedInUser.getProviderId()).orElseThrow(() -> new NotFoundException("Menu with id "+id+" not found"));
 
         return toReadMenuDto(menu);
     }
@@ -52,7 +54,7 @@ public class MenuService {
     @Transactional
     public ReadMenuDto updateMenu(int id, MenuDto newMenu) {
 
-        Menu menu = menuRepository.findById(id).orElseThrow(() -> new NotFoundException("Menu not with "+id+" not found"));
+        Menu menu = menuRepository.findByIdAndCreatedBy(id, loggedInUser.getProviderId()).orElseThrow(() -> new NotFoundException("Menu not with "+id+" not found"));
         setMenu(menu, newMenu);
         menuRepository.save(menu);
 
@@ -62,8 +64,7 @@ public class MenuService {
 
     @Transactional
     public void deleteMenu(int id) {
-        Menu menu = menuRepository.findById(id).orElseThrow(() -> new NotFoundException("Menu with id "+id+" not found"));
-
+        Menu menu = menuRepository.findByIdAndCreatedBy(id, loggedInUser.getProviderId()).orElseThrow(() -> new NotFoundException("Menu with id "+id+" not found"));
         menuRepository.delete(menu);
     }
 
@@ -71,7 +72,7 @@ public class MenuService {
         return new ReadMenuDto(menu.getId(), menu.getMenuName(), menu.getMenu(), menu.getMenuCreatedDate());
      }
     /**
-     * Method for reuse that finds meals by id.
+     * Method for reuse that finds meals by meal id and created by id.
      * Distinct count handles duplicate meals
      * Stores them in a map
      * Creates a List of MealOfMenu from saved map and the order from saved mealIds.
@@ -81,7 +82,9 @@ public class MenuService {
 
         List<Integer> idForNewMeal = newMenu.mealIds();
         long distinctCount = idForNewMeal.stream().distinct().count();
-        List<Meal> meals = mealRepository.findAllById(newMenu.mealIds());
+
+        List<Meal> allMeals = mealRepository.findByCreatedBy(loggedInUser.getProviderId());
+        List<Meal> meals = allMeals.stream().filter(meal -> idForNewMeal.contains(meal.getId())).toList();
 
         if(meals.size() != distinctCount) {
             throw new NotFoundException("All meals not found");

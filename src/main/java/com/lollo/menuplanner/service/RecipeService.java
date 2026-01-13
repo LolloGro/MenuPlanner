@@ -15,15 +15,17 @@ public class RecipeService {
 
     private final MealRepository mealRepository;
     private final RecipeRepository recipeRepository;
+    private final LoggedInUser loggedInUser;
 
-    public RecipeService(MealRepository mealRepository, RecipeRepository recipeRepository) {
+    public RecipeService(MealRepository mealRepository, RecipeRepository recipeRepository, LoggedInUser loggedInUser) {
         this.mealRepository = mealRepository;
         this.recipeRepository = recipeRepository;
+        this.loggedInUser = loggedInUser;
     }
 
     @Transactional
     public RecipeDto createRecipe(RecipeDto recipe, int id) {
-        Meal meal = mealRepository.findById(id).orElseThrow(() -> new NotFoundException("Meal not found"));
+        Meal meal = mealRepository.findByIdAndCreatedBy(id, loggedInUser.getProviderId()).orElseThrow(() -> new NotFoundException("Meal not found"));
 
         if(meal.getRecipe() != null) {
             throw new DuplicateResourcesException("Recipe already exists");
@@ -40,7 +42,7 @@ public class RecipeService {
 
     @Transactional
     public RecipeDto updateRecipe(RecipeDto recipe, int id) {
-        Meal meal = mealRepository.findById(id).orElseThrow(() -> new NotFoundException("Meal not found"));
+        Meal meal = mealRepository.findByIdAndCreatedBy(id, loggedInUser.getProviderId()).orElseThrow(() -> new NotFoundException("Meal not found"));
 
         Recipe recipeToUpdate = meal.getRecipe();
 
@@ -57,7 +59,7 @@ public class RecipeService {
 
     @Transactional
     public void deleteRecipe(int id) {
-        Meal meal = mealRepository.findById(id).orElseThrow(() -> new NotFoundException("Meal not found"));
+        Meal meal = mealRepository.findByIdAndCreatedBy(id, loggedInUser.getProviderId()).orElseThrow(() -> new NotFoundException("Meal not found"));
 
         if(meal.getRecipe() == null) {
             throw new NotFoundException("Recipe not found");

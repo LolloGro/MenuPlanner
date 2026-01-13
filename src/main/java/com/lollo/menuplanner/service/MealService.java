@@ -17,18 +17,20 @@ import static com.lollo.menuplanner.util.Capitalize.capitalizeFirstLetter;
 public class MealService {
 
     private final MealRepository mealRepository;
+    private final LoggedInUser loggedInUser;
 
-    public MealService(MealRepository mealRepository) {
+    public MealService(MealRepository mealRepository, LoggedInUser  loggedInUser) {
         this.mealRepository = mealRepository;
+        this.loggedInUser = loggedInUser;
     }
 
     public List<ReadMealDto> getAllMeals() {
-        return mealRepository.findAll().stream()
+        return mealRepository.findByCreatedBy(loggedInUser.getProviderId()).stream()
             .map(meal -> new ReadMealDto(meal.getId(), meal.getMealName(), meal.getMainIngredient(), meal.getMealType(), meal.getTime())).toList();
     }
 
     public ReadMealDto getMeal(int id) {
-        Meal meal =  mealRepository.findById(id).orElseThrow(()->new NotFoundException("Meal with id "+id+" not found"));
+        Meal meal =  mealRepository.findByIdAndCreatedBy(id, loggedInUser.getProviderId()).orElseThrow(()->new NotFoundException("Meal with id "+id+" not found"));
 
         return  new ReadMealDto(meal.getId(), meal.getMealName(), meal.getMainIngredient(), meal.getMealType(), meal.getTime());
     }
@@ -38,7 +40,7 @@ public class MealService {
 
         String nameToUpperCase = capitalizeFirstLetter(mealDto.mealName().trim());
 
-        if(mealRepository.findMealByMealName(nameToUpperCase).isPresent()){
+        if(mealRepository.findMealByMealNameAndCreatedBy(nameToUpperCase, loggedInUser.getProviderId()).isPresent()){
             throw new DuplicateResourcesException("Meal with name " + mealDto.mealName() + " already exists");
         }
 
@@ -51,11 +53,11 @@ public class MealService {
 
     @Transactional
     public MealDto updateMeal(int id, MealDto mealDto) {
-        Meal mealToUpdate = mealRepository.findById(id).orElseThrow(() -> new NotFoundException("Meal with id "+id+" not found"));
+        Meal mealToUpdate = mealRepository.findByIdAndCreatedBy(id, loggedInUser.getProviderId()).orElseThrow(() -> new NotFoundException("Meal with id "+id+" not found"));
 
         String nameToUpperCase = capitalizeFirstLetter(mealDto.mealName().trim());
 
-        if(mealRepository.findMealByMealName(nameToUpperCase).filter(meal -> !meal.getId().equals(id)).isPresent()){
+        if(mealRepository.findMealByMealNameAndCreatedBy(nameToUpperCase, loggedInUser.getProviderId()).filter(meal -> !meal.getId().equals(id)).isPresent()){
             throw new DuplicateResourcesException("Meal with name " + mealDto.mealName() + " already exists");
         }
 
@@ -70,7 +72,7 @@ public class MealService {
 
     @Transactional
     public void deleteMeal(int id) {
-        Meal mealToDelete = mealRepository.findById(id).orElseThrow(() -> new NotFoundException("Meal with id "+id+" not found"));
+        Meal mealToDelete = mealRepository.findByIdAndCreatedBy(id, loggedInUser.getProviderId()).orElseThrow(() -> new NotFoundException("Meal with id "+id+" not found"));
 
         mealRepository.delete(mealToDelete);
     }
