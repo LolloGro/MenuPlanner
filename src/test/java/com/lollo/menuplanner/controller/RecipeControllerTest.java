@@ -1,5 +1,7 @@
 package com.lollo.menuplanner.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.lollo.menuplanner.TestAuditorConfig;
 import com.lollo.menuplanner.TestcontainersConfiguration;
 import com.lollo.menuplanner.dto.ReadMealDto;
 import com.lollo.menuplanner.entity.Ingredient;
@@ -20,7 +22,6 @@ import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
-import tools.jackson.databind.ObjectMapper;
 
 import java.util.List;
 
@@ -29,10 +30,10 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @ActiveProfiles("test")
-@Import(TestcontainersConfiguration.class)
+@Import({TestcontainersConfiguration.class, TestAuditorConfig.class})
 @AutoConfigureMockMvc
 @SpringBootTest
-@WithMockUser
+@WithMockUser(username = "test")
 class RecipeControllerTest {
 
     @Autowired
@@ -43,13 +44,16 @@ class RecipeControllerTest {
     private MealService mealService;
     @Autowired
     private MockMvc mockMvc;
-    @Autowired
-    private ObjectMapper objectMapper;
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
     @BeforeEach
     void setUp() {
         mealRepository.deleteAll();
-        Meal meal = new Meal("Veggie soup", "Carrots", MealType.LUNCH, 60);
+        Meal meal = new Meal();
+        meal.setMealName("Veggie soup");
+        meal.setMainIngredient("Carrots");
+        meal.setMealType(MealType.LUNCH);
+        meal.setTime(60);
         mealRepository.save(meal);
     }
 

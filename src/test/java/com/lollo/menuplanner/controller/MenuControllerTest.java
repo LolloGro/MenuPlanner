@@ -1,5 +1,7 @@
 package com.lollo.menuplanner.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.lollo.menuplanner.TestAuditorConfig;
 import com.lollo.menuplanner.TestcontainersConfiguration;
 import com.lollo.menuplanner.dto.MenuDto;
 import com.lollo.menuplanner.dto.ReadMenuDto;
@@ -20,7 +22,6 @@ import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
-import tools.jackson.databind.ObjectMapper;
 
 import java.util.List;
 
@@ -30,22 +31,21 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ActiveProfiles("test")
-@Import(TestcontainersConfiguration.class)
+@Import({TestcontainersConfiguration.class, TestAuditorConfig.class})
 @AutoConfigureMockMvc
 @SpringBootTest
-@WithMockUser
+@WithMockUser(username = "test")
 class MenuControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
-    @Autowired
-    private ObjectMapper objectMapper;
     @Autowired
     private MenuRepository menuRepository;
     @Autowired
     private MealRepository mealRepository;
     @Autowired
     private MenuService menuService;
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
     @BeforeEach
     void setUp() {

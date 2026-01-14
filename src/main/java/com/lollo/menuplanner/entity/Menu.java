@@ -1,8 +1,10 @@
 package com.lollo.menuplanner.entity;
 
 import jakarta.persistence.*;
-import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.proxy.HibernateProxy;
+import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -11,15 +13,19 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "menu")
+@EntityListeners(AuditingEntityListener.class)
 public class Menu {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false)
     private Integer id;
+    @CreatedBy
+    @Column(nullable = false, updatable = false)
+    private String createdBy;
     @Column(nullable = false)
     private String menuName;
-    @CreationTimestamp
+    @CreatedDate
     @Column(updatable = false)
     private LocalDateTime menuCreatedDate;
     @ElementCollection
@@ -34,6 +40,10 @@ public class Menu {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public String getCreatedBy() {
+        return createdBy;
     }
 
     public String getMenuName() {

@@ -1,10 +1,12 @@
 package com.lollo.menuplanner.entity;
 
+import com.lollo.menuplanner.TestAuditorConfig;
 import com.lollo.menuplanner.TestcontainersConfiguration;
 import com.lollo.menuplanner.repository.MenuRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ActiveProfiles;
 
@@ -13,7 +15,8 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 @ActiveProfiles("test")
-@Import(TestcontainersConfiguration.class)
+@Import({TestcontainersConfiguration.class, TestAuditorConfig.class})
+@AutoConfigureMockMvc
 @SpringBootTest
 class MenuTest {
 
@@ -21,7 +24,7 @@ class MenuTest {
     private MenuRepository menuRepository;
 
     @Test
-    void shouldSetDate() throws Exception {
+    void shouldSetDate(){
         MealOfMenu mealOne = new MealOfMenu(1, "Veggie soup");
         MealOfMenu mealTwo = new MealOfMenu(2, "Meatballs");
 
@@ -34,6 +37,5 @@ class MenuTest {
         menuRepository.save(menu);
 
         assertNotNull(menu.getMenuCreatedDate());
-
     }
 }
