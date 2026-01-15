@@ -19,13 +19,12 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
             .authorizeHttpRequests(req -> req
-                    .requestMatchers("/api/**").authenticated()
-                    .requestMatchers("/", "/login", "/errors", "/css/**", "/js/**").permitAll())
+                .requestMatchers("/api/meals","/api/menus").authenticated()
+                .requestMatchers("/", "/login", "/oauth2/**","/assets/**", "/index.html").permitAll().anyRequest().permitAll())
             .oauth2Login(oauth -> oauth
                 .userInfoEndpoint(user -> user.userService(customOAuth2Service)))
             .logout(logout -> logout.logoutSuccessUrl("/"))
             .csrf(csrf -> csrf.disable())
             .build();
     }
-
 }
