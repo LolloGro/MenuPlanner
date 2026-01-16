@@ -4,7 +4,7 @@ import Box from "../components/Box.tsx";
 export default function Home(){
     return (
             <Layout>
-                <section className="max-w-xl min-w-xs mt-4 mb-4">
+                <section className="max-w-md min-w-xs mt-6 mb-6">
                         <h1 className="text-3xl font-bold mb-2">What's for dinner?</h1>
                         <p className="mb-2"> We help you remember meals you might otherwise forget
                             and make meal planning a little easier.</p>
