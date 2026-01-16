@@ -16,7 +16,7 @@ export default function Header() {
                 <li><Link href={"/"}>Home</Link></li>
                 <li><Link href={"/meals"}>Meals</Link></li>
                 <li><Link href={"/menus"}>Menus</Link></li>
-                <li><Link href={"/login"}>Login</Link></li>
+                <li><Link href={"login/oauth2/code/google"}>Login</Link></li>
             </ul>
         </nav>
     </header>)
