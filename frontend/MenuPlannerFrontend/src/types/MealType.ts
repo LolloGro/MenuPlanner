@@ -1,4 +1,1 @@
-export enum MealType {
-    USER = "USER",
-    ADMIN = "ADMIN",
-}
+export type MealType = "BREAKFAST" | "LUNCH" | "DINNER" | "SNACK" | "DESSERT";
