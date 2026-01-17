@@ -1,4 +1,4 @@
-import {isLoggedIn} from "../service/authService.tsx";
+import {isLoggedIn} from "../service/authService.ts";
 import {useEffect, useState} from "react";
 
 export function useAuth() {

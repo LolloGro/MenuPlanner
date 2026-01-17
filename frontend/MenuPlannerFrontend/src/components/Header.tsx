@@ -13,10 +13,10 @@ export default function Header() {
         </div>
         <nav className="bg-secondary  w-full">
             <ul className="flex justify-center gap-8">
-                <li><Link href={"/"}>Home</Link></li>
+                <li><Link href="/">Home</Link></li>
                 <li><Link href={"/meals"}>Meals</Link></li>
                 <li><Link href={"/menus"}>Menus</Link></li>
-                <li><Link href={"login/oauth2/code/google"}>Login</Link></li>
+                <li><Link href={"/oauth2/authorization/google"}>Login</Link></li>
             </ul>
         </nav>
     </header>)

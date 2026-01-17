@@ -2,10 +2,14 @@ import {useMeals} from "../hooks/useMeals.ts";
 
 export default function ListOfMeals() {
 
-    const {meals, error} = useMeals();
+    const {meals, error, loading} = useMeals();
 
     if(error){
         return <p>{error}</p>
+    }
+
+    if(loading){
+        return <p>Loading...</p>
     }
 
     if(meals.length === 0) {

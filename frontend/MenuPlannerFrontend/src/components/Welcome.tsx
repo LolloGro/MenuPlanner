@@ -1,4 +1,4 @@
-import {useAuth} from "../hooks/useAuth.tsx";
+import {useAuth} from "../hooks/useAuth.ts";
 
 export default function Welcome() {
     const auth = useAuth();

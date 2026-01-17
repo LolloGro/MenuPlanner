@@ -1,5 +1,5 @@
 export async function isLoggedIn(): Promise<boolean> {
-    const res = await fetch("/api/users/meals",{
+    const res = await fetch("/auth",{
 
         method: "GET",
         credentials: "include",
