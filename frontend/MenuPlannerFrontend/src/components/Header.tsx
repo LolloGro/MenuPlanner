@@ -1,5 +1,5 @@
 import menu from "../assets/Menu.png";
-import Link from "./Link.tsx";
+import Link from "./Link";
 
 export default function Header() {
     return(<header className="bg-primary text-white shadow-md">

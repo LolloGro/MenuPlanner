@@ -1,4 +1,4 @@
-import {getMeals} from "../service/mealService.ts";
+import {getMeals} from "../service/mealService";
 import type {Meal} from "../types/Meal";
 import {useEffect, useState} from "react";
 

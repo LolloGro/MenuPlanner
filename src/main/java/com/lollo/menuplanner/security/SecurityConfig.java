@@ -3,6 +3,7 @@ package com.lollo.menuplanner.security;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
@@ -21,7 +22,7 @@ public class SecurityConfig {
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/", "/index.html", "/assets/**").permitAll()
                 .requestMatchers("/oauth2/**").permitAll()
-                .requestMatchers("/api/meals/**","/api/menus/**").authenticated()
+                .requestMatchers("/api/**").authenticated()
                 .anyRequest().permitAll())
             .oauth2Login(oauth -> oauth
                 .userInfoEndpoint(user -> user
@@ -32,7 +33,7 @@ public class SecurityConfig {
                 .invalidateHttpSession(true)
                 .clearAuthentication(true)
                 .deleteCookies("JSESSIONID"))
-            .csrf(csrf -> csrf.disable())
+            .csrf(AbstractHttpConfigurer::disable)
             .build();
     }
 }

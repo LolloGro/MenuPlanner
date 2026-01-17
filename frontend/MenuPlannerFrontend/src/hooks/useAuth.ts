@@ -1,4 +1,4 @@
-import {isLoggedIn} from "../service/authService.ts";
+import {isLoggedIn} from "../service/authService";
 import {useEffect, useState} from "react";
 
 export function useAuth() {
@@ -6,8 +6,7 @@ export function useAuth() {
 
     useEffect(() => {
         isLoggedIn()
-            .then(setAuthenticated)
-            .catch(() => setAuthenticated(false));
+            .then(setAuthenticated);
     }, [])
 
     return authenticated;

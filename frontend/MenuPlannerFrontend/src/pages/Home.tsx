@@ -1,6 +1,6 @@
-import Layout from "../components/Layout.tsx";
-import Box from "../components/Box.tsx";
-import Welcome from "../components/Welcome.tsx";
+import Layout from "../components/Layout";
+import Box from "../components/Box";
+import Welcome from "../components/Welcome";
 
 export default function Home(){
     return (

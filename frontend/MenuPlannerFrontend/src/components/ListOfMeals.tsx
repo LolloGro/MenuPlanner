@@ -1,4 +1,4 @@
-import {useMeals} from "../hooks/useMeals.ts";
+import {useMeals} from "../hooks/useMeals";
 
 export default function ListOfMeals() {
 
