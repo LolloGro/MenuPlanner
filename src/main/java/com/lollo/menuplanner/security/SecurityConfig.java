@@ -20,8 +20,8 @@ public class SecurityConfig {
         return http
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/", "/index.html", "/assets/**").permitAll()
-                .requestMatchers("/login/**", "/oauth2/**").permitAll()
-                .requestMatchers("/api/meals","/api/menus").authenticated()
+                .requestMatchers("/oauth2/**").permitAll()
+                .requestMatchers("/api/meals/**","/api/menus/**").authenticated()
                 .anyRequest().permitAll())
             .oauth2Login(oauth -> oauth
                 .userInfoEndpoint(user -> user
