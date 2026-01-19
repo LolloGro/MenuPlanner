@@ -1,6 +1,6 @@
 import type {ButtonType} from "../types/ButtonType";
 
-export default function Button({type, text, onClick}: ButtonType) {
+export default function PageButton({type, text, onClick}: ButtonType) {
     return (
         <button
             type={type}

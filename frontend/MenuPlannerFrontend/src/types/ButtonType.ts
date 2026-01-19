@@ -1,6 +1,6 @@
 export interface ButtonType{
     type: 'button'|'submit'|'reset';
     text: string;
-    onClick: () => void;
+    onClick?: () => void;
     className?: string;
 }
