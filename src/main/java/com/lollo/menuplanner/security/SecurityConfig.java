@@ -1,5 +1,6 @@
 package com.lollo.menuplanner.security;
 
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -15,7 +16,6 @@ public class SecurityConfig {
         this.customOAuth2Service = customOAuth2Service;
     }
 
-    //Hantera endpoints för meal och menu
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
@@ -28,6 +28,14 @@ public class SecurityConfig {
                 .userInfoEndpoint(user -> user
                     .userService(customOAuth2Service))
                 .defaultSuccessUrl("/", true))
+            .exceptionHandling(ex -> ex
+                .authenticationEntryPoint((req, resp,e) -> {
+                    if(req.getRequestURI().startsWith("/api/meals/**")){
+                        resp.sendError(HttpServletResponse.SC_UNAUTHORIZED);
+                    }else{
+                        resp.sendRedirect("/oauth2/authorization/google");
+                    }
+                }))
             .logout(logout -> logout
                 .logoutSuccessUrl("/")
                 .invalidateHttpSession(true)
