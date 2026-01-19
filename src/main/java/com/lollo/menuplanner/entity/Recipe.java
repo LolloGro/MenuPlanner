@@ -43,10 +43,6 @@ public class Recipe {
         return createdBy;
     }
 
-    public void setCreatedBy(String createdBy) {
-        this.createdBy = createdBy;
-    }
-
     public Meal getMeal() {
         return meal;
     }
