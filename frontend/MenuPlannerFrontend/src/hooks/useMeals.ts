@@ -2,7 +2,7 @@ import {getMeals} from "../service/mealService";
 import{addMeal} from "../service/mealService";
 import type {Meal} from "../types/Meal";
 import {useEffect, useState} from "react";
-import type {CreateMeal} from "../types/CreateMeal.ts";
+import type {CreateMeal} from "../types/CreateMeal";
 
 export function useMeals() {
     const [meals, setMeals] = useState<Meal[]>([]);
