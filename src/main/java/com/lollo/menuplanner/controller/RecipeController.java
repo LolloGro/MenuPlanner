@@ -4,6 +4,7 @@ import com.lollo.menuplanner.dto.RecipeDto;
 import com.lollo.menuplanner.service.RecipeService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -20,6 +21,11 @@ public class RecipeController {
 
     public RecipeController(RecipeService recipeService) {
         this.recipeService = recipeService;
+    }
+
+    @GetMapping("/recipes")
+    public ResponseEntity<RecipeDto> getRecipe(@PathVariable int id){
+        return recipeService.getRecipe(id);
     }
 
     @PostMapping("/recipes")
