@@ -3,6 +3,7 @@ import type {CreateMeal} from "../types/CreateMeal";
 import {useState} from "react";
 import {useAddMeal} from "../hooks/useMeals";
 import * as React from "react";
+import RecipeForm from "./RecipeForm";
 
 export default function MealForm({open}:{open:string}) {
 
@@ -55,6 +56,7 @@ export default function MealForm({open}:{open:string}) {
                 <label>Estimated time to cook:</label>
                 <input className={"p-1 border rounded-md text-2xl"}
                        type={"number"}
+                       step={5}
                        value={newMeal.time}
                        onChange={(e) => setNewMeal({...newMeal, time: Number(e.target.value)})}
                        required={true} min={0}></input>
@@ -73,7 +75,7 @@ export default function MealForm({open}:{open:string}) {
                 {message && <p>{message}</p>}
                 {error && <p>{error}</p>}
             </form>
-
+            <RecipeForm/>
         </div>
     )
 }
