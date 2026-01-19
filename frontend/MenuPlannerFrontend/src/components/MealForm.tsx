@@ -71,7 +71,7 @@ export default function MealForm({open}:{open:string}) {
                         ))}
                 </select>
             <button type={"submit"} className={"bg-primary text-white rounded-md m-2 p-2 shadow-lg hover:text-2xl hover:cursor-pointer"}>Save</button>
-                {loading && <p>{loading}</p>}
+                {loading && <p>{"saving"}</p>}
                 {message && <p>{message}</p>}
                 {error && <p>{error}</p>}
             </form>

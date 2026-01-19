@@ -24,7 +24,7 @@ public class RecipeController {
     }
 
     @GetMapping("/recipes")
-    public ResponseEntity<RecipeDto> getRecipe(@PathVariable int id){
+    public ResponseEntity<RecipeDto> getRecipe(@PathVariable Integer id){
         return recipeService.getRecipe(id);
     }
 

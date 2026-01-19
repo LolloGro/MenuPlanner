@@ -26,7 +26,7 @@ export default function Meals() {
     return (
     <Layout>
         <h2 className="text-2xl font-bold">Meals</h2>
-        <p>Add your favorite meal, and then if you like a belonging recipe </p>
+        <p>Add your favorite meal, and optionally include a recipe</p>
       <PageButton type={"button"} text={"Add meal"} onClick={() => handleOpenForm()}></PageButton>
         <MealForm open={open} />
         <p>View all your saved meals</p>

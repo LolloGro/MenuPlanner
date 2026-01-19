@@ -63,7 +63,9 @@ export default function RecipeForm() {
             </form>
             <div className={"flex flex-col"}>
                 <label>Description</label>
-                <textarea className={"p-1 border rounded-md"} onChange={(e) => setDescription(e.target.value)}></textarea>
+                <textarea className={"p-1 border rounded-md"}
+                          value={description}
+                          onChange={(e) => setDescription(e.target.value)}></textarea>
             </div>
         </>
     )

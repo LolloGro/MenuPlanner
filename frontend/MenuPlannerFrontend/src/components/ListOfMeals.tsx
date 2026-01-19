@@ -9,8 +9,8 @@ export default function ListOfMeals({openList}: {openList:string}) {
     const {meals, error, loading} = useMeals();
     const [meal, setMeal] = useState<Meal | null>(null);
 
-    function handleView(meal:Meal){
-        setMeal(meal);
+    function handleView(ref:Meal){
+        setMeal(ref);
     }
 
     if(error){
@@ -30,8 +30,8 @@ export default function ListOfMeals({openList}: {openList:string}) {
             <div className={openList}>
             <h2>List of meals:</h2>
             <ul>
-                {meals.map(meal => (
-                    <li key={meal.id}>{meal.mealName}<MealsButton type={"button"} text={"Views"} onClick={() => handleView(meal)}></MealsButton></li>
+                {meals.map(ref => (
+                    <li key={ref.id}>{ref.mealName}<MealsButton type={"button"} text={"Views"} onClick={() => handleView(ref)}></MealsButton></li>
                 ))}
             </ul>
         </div>

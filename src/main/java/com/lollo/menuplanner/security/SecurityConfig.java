@@ -30,7 +30,7 @@ public class SecurityConfig {
                 .defaultSuccessUrl("/", true))
             .exceptionHandling(ex -> ex
                 .authenticationEntryPoint((req, resp,e) -> {
-                    if(req.getRequestURI().startsWith("/api/meals/**")){
+                    if(req.getRequestURI().startsWith("/api/**")){
                         resp.sendError(HttpServletResponse.SC_UNAUTHORIZED);
                     }else{
                         resp.sendRedirect("/oauth2/authorization/google");

@@ -4,7 +4,7 @@ import {getRecipe} from "../service/recipeService";
 export function useGetRecipe(recipeId: number) {
 
     const [error, setError] = useState<string | null>(null);
-    const [loading, setLoading] = useState<boolean>(true);
+    const [loading, setLoading] = useState<boolean>(false);
 
     const get = async () => {
         setError(null);
