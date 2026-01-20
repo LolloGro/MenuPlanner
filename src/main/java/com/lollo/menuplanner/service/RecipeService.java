@@ -7,9 +7,10 @@ import com.lollo.menuplanner.exception.DuplicateResourcesException;
 import com.lollo.menuplanner.exception.NotFoundException;
 import com.lollo.menuplanner.repository.MealRepository;
 import com.lollo.menuplanner.repository.RecipeRepository;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Optional;
 
 @Service
 public class RecipeService {
@@ -24,10 +25,10 @@ public class RecipeService {
         this.loggedInUser = loggedInUser;
     }
 
-    public ResponseEntity<RecipeDto> getRecipe(int id) {
-        return recipeRepository.findByIdAndCreatedBy(id, loggedInUser.getProviderId())
-            .map(recipe -> ResponseEntity.ok(new RecipeDto(recipe.getIngredient(), recipe.getDescription())))
-                .orElse(ResponseEntity.noContent().build());
+    public Optional<RecipeDto> getRecipe(int id) {
+        return mealRepository.findByIdAndCreatedBy(id, loggedInUser.getProviderId())
+            .map(Meal::getRecipe)
+            .map(recipe -> new RecipeDto(recipe.getIngredient(), recipe.getDescription()));
     }
 
     @Transactional
