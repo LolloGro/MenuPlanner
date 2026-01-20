@@ -4,9 +4,10 @@ import {useState} from "react";
 import {useAddMeal} from "../hooks/useMeals";
 import * as React from "react";
 import MealsButton from "./MealsButton";
-import type {ViewOptions} from "../types/ViewOptions.ts";
+import type {ViewOptions} from "../types/ViewOptions";
+import type {Meal} from "../types/Meal";
 
-export default function MealForm({addRecipe}:{addRecipe:(res: number | null) => void}) {
+export default function MealForm({addRecipe}:{addRecipe:(res: Meal | null) => void}) {
 
     const [newMeal, setNewMeal] = useState<CreateMeal>({
         mealName: "",
@@ -26,14 +27,14 @@ export default function MealForm({addRecipe}:{addRecipe:(res: number | null) => 
     const {add, error, loading} = useAddMeal();
 
     const [message, setMessage] = useState<string|null>(null);
-    const [mealId, setMealId] = useState<number|null>(null);
+    const [meal, setMeal] = useState<Meal|null>(null);
 
     const saveMeal = async(e: React.FormEvent) => {
         e.preventDefault();
         try{
             const res = await add(newMeal);
             setMessage(res.mealName +" successfully Saved!");
-            setMealId(res.id);
+            setMeal(res);
             setNewMeal({mealName: "", mainIngredient: "", mealType: "DINNER", time: 0});
             setView("NONE");
         }catch{}
@@ -86,7 +87,7 @@ export default function MealForm({addRecipe}:{addRecipe:(res: number | null) => 
                 <p>{message}</p>
                 <p>Do you lika to add a recipe to saved meal?</p>
                 <div>
-                    <MealsButton type={"button"} text={"Yes"} onClick={() => addRecipe(mealId)} />
+                    <MealsButton type={"button"} text={"Yes"} onClick={() => addRecipe(meal)} />
                     <MealsButton type={"button"} text={"No"} onClick={() => setMessage(null)}/>
                 </div>
             </div>

@@ -5,8 +5,12 @@ import MealsButton from "./MealsButton.tsx";
 import {useAddRecipe} from "../hooks/useRecipe";
 import type {Recipe} from "../types/Recipe.ts";
 import type {ViewOptions} from "../types/ViewOptions";
+import type {Meal} from "../types/Meal";
 
-export default function RecipeForm({recipeId}:{recipeId:number}) {
+export default function RecipeForm({meal}:{meal:Meal}) {
+
+    const recipeId= meal.id;
+    const mealName = meal.mealName;
 
     const [ingredients, setIngredients] = useState<Ingredient[]>([]);
     const [newIngredient, setNewIngredient] = useState<Ingredient>(
@@ -49,23 +53,8 @@ export default function RecipeForm({recipeId}:{recipeId:number}) {
                     <div className={"flex justify-center min-w-120 max-w-200 bg-white rounded-lg shadow-xl p-6"}>
                         <div className={"min-w-80 max-w-90 max-h-screen overflow-auto"}>
 
-                                <div className={"bg-gray-200 flex flex-col items-center justify-center border-1 border-solid border-primary rounded-md"}>
-                                    <h2 className={"font-bold"}>Added ingredients:</h2>
-                                    <ul className={"p-2"}>
-                                        {ingredients.map((ingredient: Ingredient, index: number) => (
-                                            <li key={index} className={"grid grid-cols-2 items-center"}>
-                                                <div className={"grid_span-1 flex flex-row gap-1"}>
-                                                    <p>{ingredient.ingredient}</p>
-                                                    <p>{ingredient.amount}</p>
-                                                    <p>{ingredient.measurement}</p>
-                                                </div>
-                                                <MealsButton className={"grid-span-2"} type={"button"} text={"Remove"} onClick={() => removeIngredient(index)}/>
-                                            </li>
-                                        ))}
-                                    </ul>
-                                </div>
-
                             <form className={"flex flex-col"} onSubmit={handleAddIngredient}>
+                                <h2 className={"font-bold text-2xl"}>Create recipe for {mealName}</h2>
                                 <label>Ingredient:</label>
                                 <input className={"p-1 border rounded-md"} type={"text"}
                                        value={newIngredient.ingredient}
@@ -88,6 +77,22 @@ export default function RecipeForm({recipeId}:{recipeId:number}) {
                                           onChange={(e) => setDescription(e.target.value)}></textarea>
                             </form>
 
+                            <div className={"bg-gray-200 flex flex-col items-center justify-center border-1 border-solid border-primary rounded-md mt-2 mb-2"}>
+                                <h2 className={"font-bold"}>Added ingredients:</h2>
+                                <ul className={"p-2"}>
+                                    {ingredients.map((ingredient: Ingredient, index: number) => (
+                                        <li key={index} className={"grid grid-cols-2 items-center"}>
+                                            <div className={"grid_span-1 flex flex-row gap-1"}>
+                                                <p>{ingredient.ingredient}</p>
+                                                <p>{ingredient.amount}</p>
+                                                <p>{ingredient.measurement}</p>
+                                            </div>
+                                            <MealsButton className={"grid-span-2"} type={"button"} text={"Remove"} onClick={() => removeIngredient(index)}/>
+                                        </li>
+                                    ))}
+                                </ul>
+                            </div>
+
                             <form className={"flex flex-col justify-center items-center"} onSubmit={saveRecipe}>
                                 <div>
                                     <MealsButton type={"submit"} text={"Save"}/>
@@ -96,6 +101,7 @@ export default function RecipeForm({recipeId}:{recipeId:number}) {
                                 {loading && <p>{"Saving"}</p>}
                                 {error && <p>{error}</p>}
                             </form>
+
                         </div>
                 </div>
             </div>}
