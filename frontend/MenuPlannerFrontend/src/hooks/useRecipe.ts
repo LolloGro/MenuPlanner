@@ -29,12 +29,12 @@ export function useAddRecipe() {
     const [error, setError] = useState<string | null>(null);
     const [loading, setLoading] = useState<boolean>(false);
 
-    const add = async ({recipeId, recipe}:{recipeId:number, recipe:Recipe}) => {
+    const add = async ({mealId, recipe}:{mealId:number, recipe:Recipe}) => {
         setError(null);
         setLoading(true);
 
         try{
-            const  result = await addRecipe({recipeId, recipe})
+            const  result = await addRecipe({mealId, recipe})
             setLoading(false);
             return result;
         }catch(error:any){

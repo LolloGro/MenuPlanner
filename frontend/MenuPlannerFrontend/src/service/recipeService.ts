@@ -26,8 +26,8 @@ export async function getRecipe (recipeId: number): Promise<Recipe | null> {
     return await res.json() as Recipe;
 }
 
-export async function addRecipe ({recipeId, recipe}:{recipeId:number, recipe: Recipe}): Promise<Recipe | null> {
-    const res = await fetch(`/api/meals/${recipeId}/recipes`, {
+export async function addRecipe ({mealId, recipe}:{mealId:number, recipe: Recipe}): Promise<Recipe> {
+    const res = await fetch(`/api/meals/${mealId}/recipes`, {
         method: "POST",
         credentials: "include",
         headers: {
