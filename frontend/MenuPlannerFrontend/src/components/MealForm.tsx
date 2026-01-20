@@ -31,13 +31,11 @@ export default function MealForm({addRecipe}:{addRecipe:(res: Meal | null) => vo
 
     const saveMeal = async(e: React.FormEvent) => {
         e.preventDefault();
-        try{
             const res = await add(newMeal);
             setMessage(res.mealName +" successfully Saved!");
             setMeal(res);
             setNewMeal({mealName: "", mainIngredient: "", mealType: "DINNER", time: 0});
             setView("NONE");
-        }catch{}
     };
 
     const [view, setView] = useState<ViewOptions>("FORM");
@@ -85,7 +83,7 @@ export default function MealForm({addRecipe}:{addRecipe:(res: Meal | null) => vo
             {message &&
             <div className={"flex flex-col justify-center items-center"}>
                 <p>{message}</p>
-                <p>Do you lika to add a recipe to saved meal?</p>
+                <p>Do you like to add a recipe to saved meal?</p>
                 <div>
                     <MealsButton type={"button"} text={"Yes"} onClick={() => addRecipe(meal)} />
                     <MealsButton type={"button"} text={"No"} onClick={() => setMessage(null)}/>

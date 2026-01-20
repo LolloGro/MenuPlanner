@@ -9,7 +9,7 @@ import type {Meal} from "../types/Meal";
 
 export default function RecipeForm({meal}:{meal:Meal}) {
 
-    const recipeId= meal.id;
+    const mealId= meal.id;
     const mealName = meal.mealName;
 
     const [ingredients, setIngredients] = useState<Ingredient[]>([]);
@@ -38,10 +38,8 @@ export default function RecipeForm({meal}:{meal:Meal}) {
             description:description,
         }
 
-        try{
-            await add({recipeId, recipe});
-            setView("NONE");
-        }catch{}
+        await add({mealId, recipe});
+        setView("NONE");
     };
 
     const [view, setView] = useState<ViewOptions>("RECIPE");
@@ -63,7 +61,8 @@ export default function RecipeForm({meal}:{meal:Meal}) {
                                 <label>Amount:</label>
                                 <input className={"p-1 border rounded-md"} type={"number"} step={0.5} min={0.5}
                                        value={newIngredient.amount ?? ""}
-                                       onChange={(e) => setNewIngredient({...newIngredient, amount: Number(e.target.value)})}
+                                       onChange={(e) =>
+                                           setNewIngredient({...newIngredient, amount: e.target.value === "" ? null: Number(e.target.value)})}
                                 ></input>
                                 <label>Measurement:</label>
                                 <input className={"p-1 border rounded-md"} type={"text"}
@@ -87,7 +86,9 @@ export default function RecipeForm({meal}:{meal:Meal}) {
                                                 <p>{ingredient.amount}</p>
                                                 <p>{ingredient.measurement}</p>
                                             </div>
-                                            <MealsButton className={"grid-span-2"} type={"button"} text={"Remove"} onClick={() => removeIngredient(index)}/>
+                                            <div className={"grid-span-2"}>
+                                                <MealsButton  type={"button"} text={"Remove"} onClick={() => removeIngredient(index)}/>
+                                            </div>
                                         </li>
                                     ))}
                                 </ul>
