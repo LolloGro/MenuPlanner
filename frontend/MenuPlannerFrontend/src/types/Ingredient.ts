@@ -1,5 +1,5 @@
 export interface Ingredient {
     ingredient: string;
-    amount: number;
+    amount: number|null;
     measurement: string;
 }
