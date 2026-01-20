@@ -89,7 +89,7 @@ class RecipeControllerTest {
                 .content(objectMapper.writeValueAsString(recipe))
                 .with(csrf()))
             .andExpect(status().isConflict())
-            .andExpect(content().string("Recipe already exists"));
+            .andExpectAll(jsonPath("$.message").value("Recipe already exists"));
     }
 
     @Test
@@ -103,7 +103,7 @@ class RecipeControllerTest {
                 .content(objectMapper.writeValueAsString(recipe))
                 .with(csrf()))
             .andExpect(status().isNotFound())
-            .andExpect(content().string("Meal not found"));
+            .andExpectAll(jsonPath("$.message").value("Meal not found"));
     }
 
     @Test
@@ -141,7 +141,7 @@ class RecipeControllerTest {
                 .content(objectMapper.writeValueAsString(carrotRecipe))
                 .with(csrf()))
             .andExpect(status().isNotFound())
-            .andExpect(content().string("Recipe not found"));
+            .andExpectAll(jsonPath("$.message").value("Recipe not found"));
     }
 
     @Test
@@ -170,7 +170,7 @@ class RecipeControllerTest {
         mockMvc.perform(delete("/api/meals/{id}/recipes", id)
                 .with(csrf()))
             .andExpect(status().isNotFound())
-            .andExpect(content().string("Recipe not found"));
+            .andExpectAll(jsonPath("$.message").value("Recipe not found"));
     }
 
     public int idForMeal(){
