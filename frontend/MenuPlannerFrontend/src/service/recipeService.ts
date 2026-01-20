@@ -25,3 +25,25 @@ export async function getRecipe (recipeId: number): Promise<Recipe | null> {
 
     return await res.json() as Recipe;
 }
+
+export async function addRecipe ({recipeId, recipe}:{recipeId:number, recipe: Recipe}): Promise<Recipe | null> {
+    const res = await fetch(`/api/meals/${recipeId}/recipes`, {
+        method: "POST",
+        credentials: "include",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(recipe),
+    })
+
+    if(!res.ok) {
+        let message = "Failed to add recipe";
+        try{
+            const error = await res.json();
+            message = error.message || message;
+        }catch {}
+        throw new Error(message);
+    }
+
+    return await res.json() as Recipe;
+}
