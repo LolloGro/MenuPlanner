@@ -2,71 +2,103 @@ import {useState} from "react";
 import type {Ingredient} from "../types/Ingredient";
 import * as React from "react";
 import MealsButton from "./MealsButton.tsx";
+import {useAddRecipe} from "../hooks/useRecipe";
+import type {Recipe} from "../types/Recipe.ts";
+import type {ViewOptions} from "../types/ViewOptions";
 
-export default function RecipeForm() {
+export default function RecipeForm({recipeId}:{recipeId:number}) {
 
     const [ingredients, setIngredients] = useState<Ingredient[]>([]);
     const [newIngredient, setNewIngredient] = useState<Ingredient>(
-        {ingredient:"", amount:0, measurement:""});
+        {ingredient:"", amount:null, measurement:""});
 
     const [description, setDescription] = useState<string>("");
 
    const handleAddIngredient = (e:React.FormEvent) => {
        e.preventDefault();
        setIngredients([...ingredients, newIngredient]);
-       setNewIngredient({ingredient:"", amount:0, measurement:""});
+       setNewIngredient({ingredient:"", amount:null, measurement:""});
    };
 
    const removeIngredient = (index:number) => {
        setIngredients(ingredients.filter((_,i) => i !== index));
    };
 
+    const {add, error, loading} = useAddRecipe();
+
+    const saveRecipe = async (e: React.FormEvent) => {
+        e.preventDefault();
+
+        const recipe:Recipe = {
+            ingredients: ingredients,
+            description:description,
+        }
+
+        try{
+            await add({recipeId, recipe});
+            setView("NONE");
+        }catch{}
+    };
+
+    const [view, setView] = useState<ViewOptions>("RECIPE");
+
     return (
         <>
-            {ingredients &&
-                <div className={"bg-gray-300 flex flex-col items-center justify-center border-2 border-solid border-primary rounded-md"}>
-                    <h2 className={"font-bold"}>Added ingredients</h2>
-                    <ul>
-                        {ingredients.map((ingredient: Ingredient, index: number) => (
-                            <li key={index} className={"flex flex-row"}>
-                                <p>{ingredient.ingredient}</p>
-                                <p>{ingredient.amount}</p>
-                                <p>{ingredient.measurement}</p>
-                                <MealsButton type={"button"} text={"Remove"} onClick={() => removeIngredient(index)}/>
-                            </li>
-                        ))}
-                    </ul>
-                </div>}
-            {description &&
-                <div>
-                    <h3>Description:</h3>
-                    <p>{description}</p>
+            {view === "RECIPE" &&
+                <div className={"fixed inset-0 bg-black/50 flex items-center justify-center z-50"}>
+                    <div className={"flex justify-center min-w-120 max-w-200 bg-white rounded-lg shadow-xl p-6"}>
+                        <div className={"min-w-80 max-w-90 max-h-screen overflow-auto"}>
+
+                                <div className={"bg-gray-200 flex flex-col items-center justify-center border-1 border-solid border-primary rounded-md"}>
+                                    <h2 className={"font-bold"}>Added ingredients:</h2>
+                                    <ul className={"p-2"}>
+                                        {ingredients.map((ingredient: Ingredient, index: number) => (
+                                            <li key={index} className={"grid grid-cols-2 items-center"}>
+                                                <div className={"grid_span-1 flex flex-row gap-1"}>
+                                                    <p>{ingredient.ingredient}</p>
+                                                    <p>{ingredient.amount}</p>
+                                                    <p>{ingredient.measurement}</p>
+                                                </div>
+                                                <MealsButton className={"grid-span-2"} type={"button"} text={"Remove"} onClick={() => removeIngredient(index)}/>
+                                            </li>
+                                        ))}
+                                    </ul>
+                                </div>
+
+                            <form className={"flex flex-col"} onSubmit={handleAddIngredient}>
+                                <label>Ingredient:</label>
+                                <input className={"p-1 border rounded-md"} type={"text"}
+                                       value={newIngredient.ingredient}
+                                       onChange={(e) => setNewIngredient({...newIngredient, ingredient: e.target.value})}
+                                       required={true}></input>
+                                <label>Amount:</label>
+                                <input className={"p-1 border rounded-md"} type={"number"} step={0.5} min={0.5}
+                                       value={newIngredient.amount ?? ""}
+                                       onChange={(e) => setNewIngredient({...newIngredient, amount: Number(e.target.value)})}
+                                ></input>
+                                <label>Measurement:</label>
+                                <input className={"p-1 border rounded-md"} type={"text"}
+                                       value={newIngredient.measurement}
+                                       onChange={(e) => setNewIngredient({...newIngredient, measurement: e.target.value})}
+                                ></input>
+                                <MealsButton type={"submit"} text={"Add ingredient"}/>
+                                <label>Description</label>
+                                <textarea className={"p-1 border rounded-md h-50"}
+                                          value={description}
+                                          onChange={(e) => setDescription(e.target.value)}></textarea>
+                            </form>
+
+                            <form className={"flex flex-col justify-center items-center"} onSubmit={saveRecipe}>
+                                <div>
+                                    <MealsButton type={"submit"} text={"Save"}/>
+                                    <MealsButton type={"button"} text={"Close"} onClick={() => setView("NONE")}/>
+                                </div>
+                                {loading && <p>{"Saving"}</p>}
+                                {error && <p>{error}</p>}
+                            </form>
+                        </div>
                 </div>
-                }
-            <form className={"flex flex-col"} onSubmit={handleAddIngredient}>
-                <label>Ingredient:</label>
-                <input className={"p-1 border rounded-md"} type={"text"}
-                       value={newIngredient.ingredient}
-                       onChange={(e) => setNewIngredient({...newIngredient, ingredient: e.target.value})}
-                       required={true}></input>
-                <label>Amount:</label>
-                <input className={"p-1 border rounded-md"} type={"number"} step={0.5} min={0}
-                       value={newIngredient.amount}
-                onChange={(e) => setNewIngredient({...newIngredient, amount: Number(e.target.value)})}
-                ></input>
-                <label>Measurement:</label>
-                <input className={"p-1 border rounded-md"} type={"text"}
-                       value={newIngredient.measurement}
-                onChange={(e) => setNewIngredient({...newIngredient, measurement: e.target.value})}
-                ></input>
-                <MealsButton type={"submit"} text={"Add ingredient"}/>
-            </form>
-            <div className={"flex flex-col"}>
-                <label>Description</label>
-                <textarea className={"p-1 border rounded-md"}
-                          value={description}
-                          onChange={(e) => setDescription(e.target.value)}></textarea>
-            </div>
+            </div>}
         </>
     )
 }
