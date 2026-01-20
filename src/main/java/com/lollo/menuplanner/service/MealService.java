@@ -36,7 +36,7 @@ public class MealService {
     }
 
     @Transactional
-    public MealDto addMeal(MealDto mealDto) {
+    public ReadMealDto addMeal(MealDto mealDto) {
 
         String nameToUpperCase = capitalizeFirstLetter(mealDto.mealName().trim());
 
@@ -48,7 +48,7 @@ public class MealService {
 
         mealRepository.save(meal);
 
-        return new MealDto(meal.getMealName(), meal.getMainIngredient(), meal.getMealType(), meal.getTime());
+        return new ReadMealDto(meal.getId(), meal.getMealName(), meal.getMainIngredient(), meal.getMealType(), meal.getTime());
     }
 
     @Transactional
