@@ -4,7 +4,7 @@ import {useState} from "react";
 import ViewMeal from "./ViewMeal";
 import type {Meal} from "../types/Meal";
 
-export default function ListOfMeals({openList}: {openList:string}) {
+export default function ListOfMeals() {
 
     const {meals, error, loading} = useMeals();
     const [meal, setMeal] = useState<Meal | null>(null);
@@ -27,7 +27,7 @@ export default function ListOfMeals({openList}: {openList:string}) {
 
     return (
         <>
-            <div className={openList}>
+            <div>
             <h2>List of meals:</h2>
             <ul>
                 {meals.map(ref => (

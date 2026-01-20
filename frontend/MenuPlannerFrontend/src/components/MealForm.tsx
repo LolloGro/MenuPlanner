@@ -3,9 +3,9 @@ import type {CreateMeal} from "../types/CreateMeal";
 import {useState} from "react";
 import {useAddMeal} from "../hooks/useMeals";
 import * as React from "react";
-import RecipeForm from "./RecipeForm";
+import MealsButton from "./MealsButton";
 
-export default function MealForm({open}:{open:string}) {
+export default function MealForm({addRecipe}:{addRecipe:(res: number | null) => void}) {
 
     const [newMeal, setNewMeal] = useState<CreateMeal>({
         mealName: "",
@@ -25,19 +25,22 @@ export default function MealForm({open}:{open:string}) {
     const {add, error, loading} = useAddMeal();
 
     const [message, setMessage] = useState<string|null>(null);
+    const [mealId, setMealId] = useState<number|null>(null);
 
     const saveMeal = async(e: React.FormEvent) => {
         e.preventDefault();
         try{
             const res = await add(newMeal);
             setMessage(res.mealName +" successfully Saved!");
+            setMealId(res.id);
+            setNewMeal({mealName: "", mainIngredient: "", mealType: "DINNER", time: 0});
         }catch(error: any){
             setMessage(null);
         }
     };
 
     return (
-        <div className={open}>
+        <div>
             <form className={"border-solid border-primary rounded-lg flex flex-col"} onSubmit={saveMeal}>
                 <label>Meal name:</label>
                 <input className={"p-1 border rounded-md text-2xl"}
@@ -70,12 +73,18 @@ export default function MealForm({open}:{open:string}) {
                             <option key={meal} value={meal}>{meal}</option>
                         ))}
                 </select>
-            <button type={"submit"} className={"bg-primary text-white rounded-md m-2 p-2 shadow-lg hover:text-2xl hover:cursor-pointer"}>Save</button>
-                {loading && <p>{"saving"}</p>}
-                {message && <p>{message}</p>}
+                <MealsButton type={"submit"} text={"Save"}/>
+                {loading && <p>{"Saving"}</p>}
+                {message &&
+                    <div>
+                        <p>{message}</p>
+                        <p>Do you lika to add a recipe to saved meal?</p>
+                        <MealsButton type={"button"} text={"Yes"} onClick={() => addRecipe(mealId)} />
+                        <MealsButton type={"button"} text={"No"} onClick={() => setMessage(null)}/>
+                    </div>
+                }
                 {error && <p>{error}</p>}
             </form>
-            <RecipeForm/>
         </div>
     )
 }
