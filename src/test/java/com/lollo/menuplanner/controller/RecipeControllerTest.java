@@ -58,6 +58,12 @@ class RecipeControllerTest {
     }
 
     @Test
+    void shouldReturnNoContentIfRecipeNotExist() throws Exception {
+        mockMvc.perform(get("/api/meals/150/recipes"))
+            .andExpect(status().isNoContent());
+    }
+
+    @Test
     void shouldReturnCreatedIfSaveIsSuccessful() throws Exception {
         int id = idForMeal();
 
