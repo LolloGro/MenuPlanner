@@ -13,7 +13,10 @@ export default function ViewMeal({meal, onClose}:{meal:Meal, onClose: () => void
     const [message, setMessage] = useState<string|null>(null);
 
     const showRecipe = async () => {
-            const res = await get();
+        setMessage(null);
+        setRecipe(null);
+
+        const res = await get();
             if(res === null) {
                 setMessage("No recipe added to meal");
                 return;
