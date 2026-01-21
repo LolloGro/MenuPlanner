@@ -25,7 +25,9 @@ public class RecipeController {
 
     @GetMapping("/recipes")
     public ResponseEntity<RecipeDto> getRecipe(@PathVariable Integer id){
-        return recipeService.getRecipe(id);
+        return recipeService.getRecipe(id)
+            .map(ResponseEntity::ok)
+            .orElseGet(() -> ResponseEntity.noContent().build());
     }
 
     @PostMapping("/recipes")

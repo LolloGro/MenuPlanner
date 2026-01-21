@@ -5,7 +5,7 @@ export default function PageButton({type, text, onClick}: ButtonType) {
         <button
             type={type}
             onClick={onClick}
-            className={"bg-primary text-white rounded-md m-2 h-14 w-40 shadow-lg hover:text-2xl hover:cursor-pointer"}
+            className={"bg-primary text-white rounded-md m-2 h-16 w-60 shadow-lg hover:bg-link-focus hover:cursor-pointer"}
         >
             {text}
         </button>

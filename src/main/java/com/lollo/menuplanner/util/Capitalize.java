@@ -11,6 +11,6 @@ public class Capitalize {
             return alter;
         }
 
-        return alter.substring(0, 1).toUpperCase() + alter.substring(1);
+        return alter.substring(0, 1).toUpperCase() + alter.substring(1).toLowerCase();
     }
 }

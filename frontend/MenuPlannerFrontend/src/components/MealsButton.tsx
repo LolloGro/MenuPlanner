@@ -5,7 +5,7 @@ export default function MealsButton({type, text, onClick}: ButtonType) {
         <button
             type={type}
             onClick={onClick}
-            className={"bg-primary text-white rounded-md m-2 p-2 shadow-lg hover:text-2xl hover:cursor-pointer"}
+            className={"bg-primary text-white rounded-md m-2 p-2 shadow-lg hover:bg-link-focus hover:cursor-pointer"}
         >
             {text}
         </button>

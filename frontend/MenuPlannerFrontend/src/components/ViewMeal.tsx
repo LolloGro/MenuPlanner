@@ -2,22 +2,26 @@ import type {Meal} from "../types/Meal";
 import {useGetRecipe} from "../hooks/useRecipe";
 import type {Recipe} from "../types/Recipe";
 import {useState} from "react";
-import MealsButton from "./MealsButton.tsx";
-import ViewRecipe from "./ViewRecipe.tsx";
+import MealsButton from "./MealsButton";
+import ViewRecipe from "./ViewRecipe";
 
 export default function ViewMeal({meal, onClose}:{meal:Meal, onClose: () => void}) {
 
     const {get, error, loading} = useGetRecipe(meal.id);
 
     const [recipe, setRecipe] = useState<Recipe|null>(null);
+    const [message, setMessage] = useState<string|null>(null);
 
     const showRecipe = async () => {
-        try{
-            const res = await get();
+        setMessage(null);
+        setRecipe(null);
+
+        const res = await get();
+            if(res === null) {
+                setMessage("No recipe added to meal");
+                return;
+            }
             setRecipe(res);
-        }catch(err){
-            setRecipe(null);
-        }
     }
 
     return(
@@ -32,6 +36,7 @@ export default function ViewMeal({meal, onClose}:{meal:Meal, onClose: () => void
             <MealsButton type={"button"} text={"View recipe"} onClick={showRecipe}/>
             <div>
                 {loading && <p>{loading}</p>}
+                {message && <p>{message}</p>}
                 {recipe && <ViewRecipe ingredients={recipe.ingredients} description={recipe.description}/>}
                 {error && <p>{error}</p>}
             </div>

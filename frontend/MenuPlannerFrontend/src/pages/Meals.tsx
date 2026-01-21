@@ -3,35 +3,32 @@ import Layout from "../components/Layout";
 import PageButton from "../components/PageButton.tsx";
 import MealForm from "../components/MealForm";
 import ListOfMeals from "../components/ListOfMeals";
+import RecipeForm from "../components/RecipeForm";
+import type {ViewOptions} from "../types/ViewOptions";
+import type {Meal} from "../types/Meal";
 
 export default function Meals() {
-    const [open, setOpen] = useState("hidden");
-    const [openList, setOpenList] = useState("hidden");
 
-    function handleOpenForm() {
-        if (open == "hidden") {
-            setOpen("visible");
-        } else {
-            setOpen("hidden");
-        }
-    }
+    const [view, setView] = useState<ViewOptions>("NONE");
+    const [savedMeal, setSavedMeal] = useState<Meal | null>(null);
 
-    function handleOpenList() {
-        if (openList == "hidden") {
-            setOpenList("visible");
-        } else {
-        setOpenList("hidden");
-        }
-    }
+    const handleYes = (meal: Meal) => {
+        setSavedMeal(meal);
+        setView("RECIPE");
+    };
+
+
     return (
     <Layout>
         <h2 className="text-2xl font-bold">Meals</h2>
         <p>Add your favorite meal, and optionally include a recipe</p>
-      <PageButton type={"button"} text={"Add meal"} onClick={() => handleOpenForm()}></PageButton>
-        <MealForm open={open} />
-        <p>View all your saved meals</p>
-      <PageButton type={"button"} text={"View meals"} onClick={() => handleOpenList()}></PageButton>
-        <ListOfMeals openList={openList} />
+      <PageButton type={"button"} text={"Add meal"}  onClick={() =>setView("MEAL")}></PageButton>
+        {view === "MEAL" && <MealForm onYes={handleYes}
+                onNo={() => setView("NONE")}/> }
+        {view === "RECIPE" && savedMeal && <RecipeForm meal={savedMeal} onClose={() => setView("NONE")}/>}
+        <h3>View all your saved meals</h3>
+      <PageButton type={"button"} text={"View meals"} onClick={() => setView("LIST")}></PageButton>
+        {view === "LIST" && <ListOfMeals />}
     </Layout>
 )
 }

@@ -27,8 +27,7 @@ import java.util.List;
 
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @ActiveProfiles("test")
 @Import({TestcontainersConfiguration.class, TestAuditorConfig.class})
@@ -111,7 +110,7 @@ class MenuControllerTest {
         mockMvc.perform(delete("/api/menus/150")
                 .with(csrf()))
             .andExpect(status().isNotFound())
-            .andExpect(content().string("Menu with id 150 not found"));
+            .andExpectAll(jsonPath("$.message").value("Menu with id 150 not found"));
     }
 
     public MenuDto createMenu(){
