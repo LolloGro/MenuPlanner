@@ -31,7 +31,7 @@ export default function ListOfMeals() {
             <h2>List of meals:</h2>
             <ul>
                 {meals.map(ref => (
-                    <li key={ref.id}>{ref.mealName}<MealsButton type={"button"} text={"Views"} onClick={() => handleView(ref)}></MealsButton></li>
+                    <li key={ref.id}>{ref.mealName}<MealsButton type={"button"} text={"View"} onClick={() => handleView(ref)}></MealsButton></li>
                 ))}
             </ul>
         </div>

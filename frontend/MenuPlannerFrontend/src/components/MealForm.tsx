@@ -7,7 +7,7 @@ import MealsButton from "./MealsButton";
 import type {ViewOptions} from "../types/ViewOptions";
 import type {Meal} from "../types/Meal";
 
-export default function MealForm({addRecipe}:{addRecipe:(res: Meal | null) => void}) {
+export default function MealForm({onYes, onNo}:{onYes:(meal: Meal) => void, onNo:() => void}) {
 
     const [newMeal, setNewMeal] = useState<CreateMeal>({
         mealName: "",
@@ -32,7 +32,7 @@ export default function MealForm({addRecipe}:{addRecipe:(res: Meal | null) => vo
     const saveMeal = async(e: React.FormEvent) => {
         e.preventDefault();
             const res = await add(newMeal);
-            setMessage(res.mealName +" successfully Saved!");
+            setMessage("Meal "+res.mealName +" successfully Saved!");
             setMeal(res);
             setNewMeal({mealName: "", mainIngredient: "", mealType: "DINNER", time: 0});
             setView("NONE");
@@ -85,8 +85,10 @@ export default function MealForm({addRecipe}:{addRecipe:(res: Meal | null) => vo
                 <p>{message}</p>
                 <p>Do you like to add a recipe to saved meal?</p>
                 <div>
-                    <MealsButton type={"button"} text={"Yes"} onClick={() => addRecipe(meal)} />
-                    <MealsButton type={"button"} text={"No"} onClick={() => setMessage(null)}/>
+                    <MealsButton type={"button"} text={"Yes"} onClick={() => meal && onYes(meal)} />
+                    <MealsButton type={"button"} text={"No"} onClick={() => {
+                        setMessage(null); setMeal(null); onNo();
+                    }}/>
                 </div>
             </div>
         }

@@ -4,10 +4,9 @@ import * as React from "react";
 import MealsButton from "./MealsButton.tsx";
 import {useAddRecipe} from "../hooks/useRecipe";
 import type {Recipe} from "../types/Recipe.ts";
-import type {ViewOptions} from "../types/ViewOptions";
 import type {Meal} from "../types/Meal";
 
-export default function RecipeForm({meal}:{meal:Meal}) {
+export default function RecipeForm({meal, onClose}:{meal:Meal, onClose: () => void}) {
 
     const mealId= meal.id;
     const mealName = meal.mealName;
@@ -39,15 +38,13 @@ export default function RecipeForm({meal}:{meal:Meal}) {
         }
 
         await add({mealId, recipe});
-        setView("NONE");
+        onClose();
     };
 
-    const [view, setView] = useState<ViewOptions>("RECIPE");
 
     return (
         <>
-            {view === "RECIPE" &&
-                <div className={"fixed inset-0 bg-black/50 flex items-center justify-center z-50"}>
+            <div className={"fixed inset-0 bg-black/50 flex items-center justify-center z-50"}>
                     <div className={"flex justify-center min-w-120 max-w-200 bg-white rounded-lg shadow-xl p-6"}>
                         <div className={"min-w-80 max-w-90 max-h-screen overflow-auto"}>
 
@@ -97,7 +94,7 @@ export default function RecipeForm({meal}:{meal:Meal}) {
                             <form className={"flex flex-col justify-center items-center"} onSubmit={saveRecipe}>
                                 <div>
                                     <MealsButton type={"submit"} text={"Save"}/>
-                                    <MealsButton type={"button"} text={"Close"} onClick={() => setView("NONE")}/>
+                                    <MealsButton type={"button"} text={"Close"} onClick={onClose}/>
                                 </div>
                                 {loading && <p>{"Saving"}</p>}
                                 {error && <p>{error}</p>}
@@ -105,7 +102,7 @@ export default function RecipeForm({meal}:{meal:Meal}) {
 
                         </div>
                 </div>
-            </div>}
+            </div>
         </>
     )
 }
