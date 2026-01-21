@@ -59,7 +59,9 @@ class RecipeControllerTest {
 
     @Test
     void shouldReturnNoContentIfRecipeNotExist() throws Exception {
-        mockMvc.perform(get("/api/meals/150/recipes"))
+        int id = idForMeal();
+
+        mockMvc.perform(get("/api/meals/"+id+"/recipes"))
             .andExpect(status().isNoContent());
     }
 
