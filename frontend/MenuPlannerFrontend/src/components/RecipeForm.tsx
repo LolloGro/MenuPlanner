@@ -45,7 +45,7 @@ export default function RecipeForm({meal, onClose}:{meal:Meal, onClose: () => vo
     return (
         <>
             <div className={"fixed inset-0 bg-black/50 flex items-center justify-center z-50"}>
-                    <div className={"flex justify-center min-w-120 max-w-200 bg-white rounded-lg shadow-xl p-6"}>
+                    <div className={"flex justify-center max-h-screen min-w-100 bg-white rounded-lg shadow-xl p-6"}>
                         <div className={"min-w-80 max-w-90 max-h-screen overflow-auto"}>
 
                             <form className={"flex flex-col"} onSubmit={handleAddIngredient}>

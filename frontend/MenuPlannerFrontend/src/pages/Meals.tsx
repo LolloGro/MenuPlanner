@@ -28,7 +28,7 @@ export default function Meals() {
         {view === "RECIPE" && savedMeal && <RecipeForm meal={savedMeal} onClose={() => setView("NONE")}/>}
         <h3>View all your saved meals</h3>
       <PageButton type={"button"} text={"View meals"} onClick={() => setView("LIST")}></PageButton>
-        {view === "LIST" && <ListOfMeals />}
+        {view === "LIST" && <ListOfMeals onClose={() => setView("NONE")}/>}
     </Layout>
 )
 }
