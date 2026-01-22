@@ -20,7 +20,7 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/", "/index.html", "/assets/**").permitAll()
+                .requestMatchers("/", "/login", "/index.html", "/assets/**", "/api/auth").permitAll()
                 .requestMatchers("/oauth2/**").permitAll()
                 .requestMatchers("/api/**").authenticated()
                 .anyRequest().permitAll())
@@ -30,13 +30,14 @@ public class SecurityConfig {
                 .defaultSuccessUrl("/", true))
             .exceptionHandling(ex -> ex
                 .authenticationEntryPoint((req, resp,e) -> {
-                    if(req.getRequestURI().startsWith("/api/**")){
+                    if(req.getRequestURI().startsWith("/api")){
                         resp.sendError(HttpServletResponse.SC_UNAUTHORIZED);
                     }else{
-                        resp.sendRedirect("/oauth2/authorization/google");
+                        resp.sendRedirect("/login");
                     }
                 }))
             .logout(logout -> logout
+                .logoutUrl("/logout")
                 .logoutSuccessUrl("/")
                 .invalidateHttpSession(true)
                 .clearAuthentication(true)
