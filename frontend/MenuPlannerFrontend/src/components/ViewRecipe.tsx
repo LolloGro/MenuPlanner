@@ -2,7 +2,7 @@ import type {Ingredient} from "../types/Ingredient";
 
 export default function ViewRecipe({ingredients, description}: {ingredients: Ingredient[], description: string}) {
     return(
-        <div className={"pl-2 pr-2"}>
+        <div className={"pl-2 pr-2 border-2 border-solid border-primary rounded-md"}>
             <h2 className={"font-bold"}>Ingrediens:</h2>
             {ingredients.map((ingredient: Ingredient, index: number) => (
                 <div key={index} className={"flex flex-row gap-1"}>
