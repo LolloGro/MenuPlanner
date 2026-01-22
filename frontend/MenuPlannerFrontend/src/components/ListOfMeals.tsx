@@ -18,7 +18,7 @@ export default function ListOfMeals({onClose}:{onClose:() => void} ) {
     }
 
     if(loading){
-        return <p>Loading...</p>
+        return <p>Loading</p>
     }
 
     if(meals.length === 0) {

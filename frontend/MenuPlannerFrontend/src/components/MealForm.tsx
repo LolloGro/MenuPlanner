@@ -76,7 +76,7 @@ export default function MealForm({onYes, onNo}:{onYes:(meal: Meal) => void, onNo
                         ))}
                     </select>
                     <MealsButton type={"submit"} text={"Save"}/>
-                    {loading && <p>{"Saving"}</p>}
+                    {loading && <p>Saving</p>}
                     {error && <p>{error}</p>}
                 </form>}
 

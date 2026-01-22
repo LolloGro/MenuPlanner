@@ -23,7 +23,7 @@ export default function ViewMeal({meal, onClose}:{meal:Meal, onClose: () => void
             }
             setRecipe(res);
     }
-    //className={"relative z-10 w-full max-w-lg max-h-[80vh] bg-white rounded-lg shadow-lg flex flex-col"}
+
     return(
         <div className={"fixed inset-0 bg-black/50 flex items-center justify-center z-50"}>
             <div className={"flex flex-col justify-center max-h-screen min-w-100 bg-white rounded-lg shadow-xl p-4"}>
@@ -39,7 +39,7 @@ export default function ViewMeal({meal, onClose}:{meal:Meal, onClose: () => void
                     </div>
                     <MealsButton type={"button"} text={"View recipe"} onClick={showRecipe}/>
                     <div>
-                        {loading && <p>{loading}</p>}
+                        {loading && <p>Loading</p>}
                         {message && <p>{message}</p>}
                         {recipe && <ViewRecipe ingredients={recipe.ingredients} description={recipe.description}/>}
                         {error && <p>{error}</p>}
