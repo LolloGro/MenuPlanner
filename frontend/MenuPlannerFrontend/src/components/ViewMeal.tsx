@@ -25,21 +25,29 @@ export default function ViewMeal({meal, onClose}:{meal:Meal, onClose: () => void
     }
 
     return(
-        <section className={"relative z-10 w-full max-w-lg max-h-[80vh] bg-white rounded-lg shadow-lg flex flex-col"}>
-            <MealsButton type={"button"} text={"Close"} onClick={onClose}/>
-            <div>
-                <p>{meal.mealName}</p>
-                <p>{meal.mainIngredient}</p>
-                <p>{meal.mealType}</p>
-                <p>{meal.time}</p>
+        <div className={"fixed inset-0 bg-black/50 flex items-center justify-center z-50"}>
+            <div className={"flex flex-col justify-center max-h-screen min-w-100 bg-white rounded-lg shadow-xl p-4"}>
+                <div className={"flex justify-end"}>
+                    <MealsButton type={"button"} text={"Close"} onClick={onClose}/>
+                </div>
+                <div className={"overflow-auto"}>
+                    <div>
+                        <p className={"text-xl font-bold"}>{meal.mealName}</p>
+                        <p>Main ingredient: {meal.mainIngredient}</p>
+                        <p>Meal type: {meal.mealType}</p>
+                        <p>Cooking time: {meal.time} min</p>
+                    </div>
+                    <MealsButton type={"button"} text={"View recipe"} onClick={showRecipe}/>
+                    <div>
+                        {loading && <p>Loading</p>}
+                        {message && <p>{message}</p>}
+                        {recipe && <ViewRecipe ingredients={recipe.ingredients} description={recipe.description}/>}
+                        {error && <p>{error}</p>}
+                    </div>
+                </div>
+
             </div>
-            <MealsButton type={"button"} text={"View recipe"} onClick={showRecipe}/>
-            <div>
-                {loading && <p>{loading}</p>}
-                {message && <p>{message}</p>}
-                {recipe && <ViewRecipe ingredients={recipe.ingredients} description={recipe.description}/>}
-                {error && <p>{error}</p>}
-            </div>
-        </section>
+        </div>
+
     )
 }

@@ -58,7 +58,7 @@ export default function MealForm({onYes, onNo}:{onYes:(meal: Meal) => void, onNo
                            onChange={(e) => setNewMeal({...newMeal, mainIngredient: e.target.value})}
                            required={true}></input>
 
-                    <label>Estimated time to cook:</label>
+                    <label>Estimated time to cook in minutes:</label>
                     <input className={"p-1 border rounded-md text-2xl"}
                            type={"number"}
                            step={5}
@@ -76,7 +76,7 @@ export default function MealForm({onYes, onNo}:{onYes:(meal: Meal) => void, onNo
                         ))}
                     </select>
                     <MealsButton type={"submit"} text={"Save"}/>
-                    {loading && <p>{"Saving"}</p>}
+                    {loading && <p>Saving</p>}
                     {error && <p>{error}</p>}
                 </form>}
 
