@@ -13,11 +13,8 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthController {
 
     @GetMapping
-    public ResponseEntity<?> isAuthenticated(Authentication authentication) {
-        if(authentication == null ||  authentication instanceof AnonymousAuthenticationToken || !authentication.isAuthenticated()) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        }
-        return ResponseEntity.ok().build();
+    public ResponseEntity<Void> isAuthenticated(Authentication authentication) {
+        boolean authenticated = authentication != null && authentication.isAuthenticated() && !(authentication instanceof AnonymousAuthenticationToken);
+        return authenticated ? ResponseEntity.ok().build() : ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
-
 }
