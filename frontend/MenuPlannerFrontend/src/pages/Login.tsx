@@ -11,7 +11,7 @@ export default function Login(){
                     <p>A Google account is required to access and use all features</p>
                     <p>No passwords are stored.</p>
                 </div>
-                <a href={"/oauth2/authorization/google"}><img className={"hover:scale-110 focus:scale-110"} src={GoogleLogo} alt="Google logo"/></a>
+                <a href={"/oauth2/authorization/google"}><img className={"hover:scale-110 focus:scale-110"} src={GoogleLogo} alt="Sign in with Google"/></a>
             </div>
         </Layout>
     )

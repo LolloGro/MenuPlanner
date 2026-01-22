@@ -6,7 +6,8 @@ export function useAuth() {
 
     useEffect(() => {
         isLoggedIn()
-            .then(setAuthenticated);
+            .then(setAuthenticated)
+            .catch(() => setAuthenticated(false));
     }, [])
 
     return authenticated;
