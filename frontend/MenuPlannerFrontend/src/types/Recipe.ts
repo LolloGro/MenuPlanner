@@ -4,4 +4,3 @@ export interface Recipe {
     ingredients: Ingredient[];
     description: string
 }
-

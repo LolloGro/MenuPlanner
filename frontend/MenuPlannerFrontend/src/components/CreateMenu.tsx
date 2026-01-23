@@ -7,9 +7,12 @@ import {useMeals} from "../hooks/useMeals";
 import MealsButton from "../components/MealsButton";
 import Spinner from "../components/Spinner";
 import * as React from "react";
+import {useAddMenus} from "../hooks/useMenus.ts";
 
 export default function CreateMenu(){
     const {meals, error, loading} = useMeals();
+    const  {menuToAdd, errorMenu, loadingMenu} = useAddMenus();
+    const [menuMessage, setMenuMessage] = useState<string|null>(null);
     const [mealForDay, setMealForDay] = useState<Meal|null>(null)
 
     const handleMealForDay   = (meal: Meal|null) => {
@@ -37,9 +40,10 @@ export default function CreateMenu(){
         setWeekMeals(meal => meal.map((item, i) => i === index ? {...item, mealId: null, mealName: "" } : item));
     };
 
-    const handleSubmit = (e:React.FormEvent) => {
+    const handleSubmit = async (e:React.FormEvent) => {
+        e.preventDefault();
+
         if(!nameOfMenu.trim()){
-            e.preventDefault();
             alert("Please type a name for your menu");
             return;
         }
@@ -47,7 +51,6 @@ export default function CreateMenu(){
         const checkNotNull = weekMeals.some(day => day.mealId === null);
 
         if (checkNotNull) {
-            e.preventDefault();
             alert("All days must contain a meal");
             return;
         }
@@ -57,8 +60,8 @@ export default function CreateMenu(){
             mealIds: weekMeals.map(id => id.mealId!)
         };
 
-        console.log(menu);
-
+        const res = await menuToAdd(menu);
+        setMenuMessage("Recipe "+res.menuName+" successfully saved");
     };
 
     return(
@@ -106,6 +109,9 @@ export default function CreateMenu(){
                 </div>
                 <form onSubmit={handleSubmit}>
                     <MealsButton type={"submit"} text={"Save menu"}/>
+                    {menuMessage && <p>{menuMessage}</p>}
+                    {errorMenu && <p>{error}</p>}
+                    {loadingMenu && <Spinner/>}
                 </form>
             </div>
     )
