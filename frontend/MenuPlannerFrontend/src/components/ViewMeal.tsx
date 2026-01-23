@@ -45,9 +45,7 @@ export default function ViewMeal({meal, onClose}:{meal:Meal, onClose: () => void
                         {error && <p>{error}</p>}
                     </div>
                 </div>
-
             </div>
         </div>
-
     )
 }
