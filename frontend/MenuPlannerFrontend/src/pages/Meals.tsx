@@ -20,14 +20,14 @@ export default function Meals() {
 
     return (
     <Layout>
-        <h2 className="text-2xl font-bold">Meals</h2>
-        <p>Add your favorite meal, and optionally include a recipe</p>
+        <h2 className="text-2xl font-bold m-4">Meals</h2>
       <PageButton type={"button"} text={"Add meal"}  onClick={() =>setView("MEAL")}></PageButton>
+        <p>Add your favorite meals, and optionally include a recipe</p>
         {view === "MEAL" && <MealForm onYes={handleYes}
                 onNo={() => setView("NONE")}/> }
         {view === "RECIPE" && savedMeal && <RecipeForm meal={savedMeal} onClose={() => setView("NONE")}/>}
-        <h3>View all your saved meals</h3>
       <PageButton type={"button"} text={"View meals"} onClick={() => setView("LIST")}></PageButton>
+        <p>View all your saved meals</p>
         {view === "LIST" && <ListOfMeals onClose={() => setView("NONE")}/>}
     </Layout>
 )
