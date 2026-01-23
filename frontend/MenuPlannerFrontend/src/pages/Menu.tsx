@@ -1,0 +1,120 @@
+import Layout from "../components/Layout";
+import {useState} from "react";
+import SelectMeal from "../components/SelectMeal";
+import type {Menu} from "../types/Menu"
+import type {Weekday} from "../types/Weekday";
+import type {Meal} from "../types/Meal";
+import {useMeals} from "../hooks/useMeals";
+import MealsButton from "../components/MealsButton";
+import Spinner from "../components/Spinner";
+import * as React from "react";
+
+export default function Menu(){
+    const {meals, error, loading} = useMeals();
+    const [mealForDay, setMealForDay] = useState<Meal>()
+
+    const handleMealForDay   = (meal: Meal) => {
+        setMealForDay(meal);
+    }
+
+    const [nameOfMenu, setNameOfMenu] = useState("");
+
+    const [weekMeals, setWeekMeals] = useState<Weekday[]>([
+        {day: "monday", mealId: null, mealName: ""},
+        {day: "tuesday", mealId: null, mealName: ""},
+        {day: "wednesday", mealId: null, mealName: ""},
+        {day: "thursday", mealId: null, mealName: ""},
+        {day: "friday", mealId: null, mealName: ""},
+        {day: "saturday", mealId: null, mealName: ""},
+        {day: "sunday", mealId: null, mealName: ""},
+    ]);
+
+    const handleMealId = (index: number, mealForDay: Meal) => {
+
+        setWeekMeals(week => week.map((day, i) =>
+        i === index ? {...day, mealId: mealForDay.id, mealName: mealForDay.mealName} : day));
+    };
+    const removeMealId = (index:number) => {
+        setWeekMeals(meal => meal.map((item, i) => i === index ? {...item, mealId: null, mealName: "" } : item));
+    };
+
+    const handleSubmit = (e:React.FormEvent) => {
+        if(!nameOfMenu.trim()){
+            e.preventDefault();
+            alert("Please select a mealForDay name");
+            return;
+        }
+        console.log(weekMeals);
+
+        const checkNotNull = weekMeals.some(day => day.mealId === null);
+
+        if (checkNotNull) {
+            e.preventDefault();
+            alert("All days must contain a meal");
+            return;
+        }
+
+        const menu:Menu ={
+            menuName: nameOfMenu,
+            mealIds: weekMeals.map(id => id.mealId!)
+        };
+
+        console.log(menu);
+
+    };
+
+    return(
+        <Layout>
+            <div>
+                <h2>Weekly dinner menu</h2>
+                <p>Crete your on menu from your saved meals</p>
+
+                <div>
+                    <div>
+                        <label>Name of menu:</label>
+                        <input className={"p-1 border rounded-md text-xl"}
+                               type={"text"}
+                               value={nameOfMenu}
+                               onChange={(e) => setNameOfMenu(e.target.value)}
+                               required={true}/>
+                    </div>
+                    <div>
+                        <label>Monday: </label>
+                        <div>
+                            {weekMeals.map((day, index) =>
+
+                            <div key={index}>
+                                <input className={"p-1 border rounded-md text-xl"}
+                                       type={"text"}
+                                       value={day.mealName || "No meal selected"}
+                                       readOnly={true}/>
+                                <MealsButton type={"button"} text={"add"}
+                                             onClick={()=>{
+                                                 if(!mealForDay) {
+                                                     alert("Please select a meal");
+                                                     return;
+                                                 }
+                                                 handleMealId(index, mealForDay)
+                                             }}/>
+                                <MealsButton type={"button"} text={"Remove"}
+                                onClick={() => {removeMealId(index)}}/>
+                            </div>
+                            )}
+                        </div>
+                    </div>
+                </div>
+
+                <SelectMeal meals={meals} handleMealForDay={handleMealForDay}/>
+
+                <form onSubmit={handleSubmit}>
+                    <MealsButton type={"submit"} text={"Save menu"}/>
+                </form>
+
+
+                {error && <p>{error}</p>}
+                {loading && <Spinner/>}
+
+            </div>
+        </Layout>
+    )
+}
