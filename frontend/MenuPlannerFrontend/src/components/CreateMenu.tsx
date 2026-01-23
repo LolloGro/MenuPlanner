@@ -9,9 +9,9 @@ import Spinner from "../components/Spinner";
 import * as React from "react";
 import {useAddMenus} from "../hooks/useMenus.ts";
 
-export default function CreateMenu(){
+export default function CreateMenu({onClose}: {onClose: () => void}) {
     const {meals, error, loading} = useMeals();
-    const  {menuToAdd, errorMenu, loadingMenu} = useAddMenus();
+    const {menuToAdd, errorMenu, loadingMenu} = useAddMenus();
     const [menuMessage, setMenuMessage] = useState<string|null>(null);
     const [mealForDay, setMealForDay] = useState<Meal|null>(null)
 
@@ -21,7 +21,7 @@ export default function CreateMenu(){
 
     const [nameOfMenu, setNameOfMenu] = useState("");
 
-    const [weekMeals, setWeekMeals] = useState<Weekday[]>([
+    const emptyWeek:Weekday[] = [
         {day: "monday", mealId: null, mealName: ""},
         {day: "tuesday", mealId: null, mealName: ""},
         {day: "wednesday", mealId: null, mealName: ""},
@@ -29,7 +29,9 @@ export default function CreateMenu(){
         {day: "friday", mealId: null, mealName: ""},
         {day: "saturday", mealId: null, mealName: ""},
         {day: "sunday", mealId: null, mealName: ""},
-    ]);
+    ];
+
+    const [weekMeals, setWeekMeals] = useState(structuredClone(emptyWeek));
 
     const handleMealId = (index: number, mealForDay: Meal) => {
 
@@ -61,12 +63,16 @@ export default function CreateMenu(){
         };
 
         const res = await menuToAdd(menu);
-        setMenuMessage("Recipe "+res.menuName+" successfully saved");
+        setMenuMessage("Recipe of "+res.menuName+" successfully saved");
+        setNameOfMenu("");
+        setWeekMeals(structuredClone(emptyWeek));
     };
 
     return(
-            <div>
+        <div className={"fixed inset-0 bg-black/50 flex items-center justify-center z-50"}>
+            <div className={"flex flex-col justify-center max-h-screen min-w-100 bg-white rounded-lg shadow-xl p-6"}>
                 <div className={"mt-4"}>
+                    <MealsButton type={"button"} text={"Close"} onClick={onClose}/>
                     <div className={"flex flex-col"}>
                         <label className={"font-bold"}>Name of menu:</label>
                         <input className={"p-1 border rounded-md text-xl"}
@@ -114,5 +120,6 @@ export default function CreateMenu(){
                     {loadingMenu && <Spinner/>}
                 </form>
             </div>
+        </div>
     )
 }

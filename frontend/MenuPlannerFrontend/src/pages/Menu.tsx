@@ -14,7 +14,7 @@ export default function Menu(){
                 <h2 className={"text-2xl font-bold flex justify-center m-4"}>Menus</h2>
                 <p>Here you can create menus from your saved meals</p>
                 <PageButton type={"button"} text={"Create menu"} onClick={()=>setView("FORM")}/>
-                {view === "FORM" && <CreateMenu/>}
+                {view === "FORM" && <CreateMenu onClose={() => setView("NONE")}/>}
             </div>
 
         </Layout>
