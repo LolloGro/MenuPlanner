@@ -11,9 +11,9 @@ import * as React from "react";
 
 export default function Menu(){
     const {meals, error, loading} = useMeals();
-    const [mealForDay, setMealForDay] = useState<Meal>()
+    const [mealForDay, setMealForDay] = useState<Meal|null>(null)
 
-    const handleMealForDay   = (meal: Meal) => {
+    const handleMealForDay   = (meal: Meal|null) => {
         setMealForDay(meal);
     }
 
@@ -41,7 +41,7 @@ export default function Menu(){
     const handleSubmit = (e:React.FormEvent) => {
         if(!nameOfMenu.trim()){
             e.preventDefault();
-            alert("Please select a mealForDay name");
+            alert("Please type a name for your menu");
             return;
         }
         console.log(weekMeals);
@@ -68,7 +68,6 @@ export default function Menu(){
             <div>
                 <h2>Weekly dinner menu</h2>
                 <p>Crete your on menu from your saved meals</p>
-
                 <div>
                     <div>
                         <label>Name of menu:</label>
@@ -78,38 +77,38 @@ export default function Menu(){
                                onChange={(e) => setNameOfMenu(e.target.value)}
                                required={true}/>
                     </div>
+                    <SelectMeal meals={meals} mealForDay={mealForDay} handleMealForDay={handleMealForDay}/>
                     <div>
-                        <label>Monday: </label>
                         <div>
                             {weekMeals.map((day, index) =>
-
                             <div key={index}>
-                                <input className={"p-1 border rounded-md text-xl"}
-                                       type={"text"}
-                                       value={day.mealName || "No meal selected"}
-                                       readOnly={true}/>
-                                <MealsButton type={"button"} text={"add"}
-                                             onClick={()=>{
-                                                 if(!mealForDay) {
-                                                     alert("Please select a meal");
-                                                     return;
-                                                 }
-                                                 handleMealId(index, mealForDay)
-                                             }}/>
-                                <MealsButton type={"button"} text={"Remove"}
-                                onClick={() => {removeMealId(index)}}/>
+                                    <label>{day.day}</label>
+                                <div className={"flex flex-row justify-center"}>
+                                    <input className={"p-1 border rounded-md text-xl"}
+                                           type={"text"}
+                                           value={day.mealName || "No meal selected"}
+                                           readOnly={true}/>
+
+                                    <MealsButton type={"button"} text={"add"}
+                                                  onClick={()=>{
+                                                      if(!mealForDay) {
+                                                          alert("Please select a meal");
+                                                          return;
+                                                      }
+                                                      handleMealId(index, mealForDay)
+                                                  }}/>
+                                    <MealsButton type={"button"} text={"Remove"}
+                                                 onClick={() => {removeMealId(index)}}/>
+                                </div>
                             </div>
                             )}
                         </div>
                     </div>
                 </div>
 
-                <SelectMeal meals={meals} handleMealForDay={handleMealForDay}/>
-
                 <form onSubmit={handleSubmit}>
                     <MealsButton type={"submit"} text={"Save menu"}/>
                 </form>
-
 
                 {error && <p>{error}</p>}
                 {loading && <Spinner/>}
