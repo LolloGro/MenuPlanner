@@ -5,7 +5,8 @@ export default function SelectMeal({meals, mealForDay ,handleMealForDay}: {meals
     return (
         <div className={"max-w-fit border-2 border-secondary rounded-md mt-4"}>
             <select
-                value={mealForDay?.id ?? ""} onChange={(e) =>{
+                value={mealForDay?.id ?? ""}
+                onChange={(e) =>{
                 const id = Number(e.target.value);
 
                 if(!id){

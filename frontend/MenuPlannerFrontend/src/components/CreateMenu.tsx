@@ -66,6 +66,7 @@ export default function CreateMenu({onClose}: {onClose: () => void}) {
         setMenuMessage("Recipe of "+res.menuName+" successfully saved");
         setNameOfMenu("");
         setWeekMeals(structuredClone(emptyWeek));
+        setMealForDay(null);
     };
 
     return(
@@ -116,7 +117,7 @@ export default function CreateMenu({onClose}: {onClose: () => void}) {
                 <form onSubmit={handleSubmit}>
                     <MealsButton type={"submit"} text={"Save menu"}/>
                     {menuMessage && <p>{menuMessage}</p>}
-                    {errorMenu && <p>{error}</p>}
+                    {errorMenu && <p>{errorMenu}</p>}
                     {loadingMenu && <Spinner/>}
                 </form>
             </div>

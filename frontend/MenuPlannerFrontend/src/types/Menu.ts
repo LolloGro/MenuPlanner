@@ -9,5 +9,5 @@ export interface ReadMenu{
     id: number;
     menuName: string;
     meals: Meal[];
-    menuCreatedDate: Date;
+    menuCreatedDate: string;
 }

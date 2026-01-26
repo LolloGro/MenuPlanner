@@ -11,7 +11,7 @@ export async function addMenu(menu:Menu):Promise<ReadMenu> {
     });
 
     if(!res.ok) {
-        let message = "Failed to add recipe";
+        let message = "Failed to add menu";
         try{
             const error = await res.json();
             message = error.message || message;
