@@ -34,7 +34,8 @@ export async function addMeal (newMeal : CreateMeal) : Promise<Meal> {
             "Content-Type": "application/json",
         },
         body: JSON.stringify(newMeal),
-    })
+    });
+
     if(!res.ok) {
         let message = "Failed to add Meal";
         try{
