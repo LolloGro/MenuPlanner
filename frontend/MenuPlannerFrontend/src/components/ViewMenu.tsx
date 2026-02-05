@@ -7,12 +7,13 @@ export default function ViewMenu({menu, onClose}:{menu:ReadMenu, onClose: () => 
     return(
         <div className={"fixed inset-0 bg-black/50 flex items-center justify-center z-50"}>
             <div className={"flex flex-col justify-center max-h-screen min-w-100 bg-white rounded-lg shadow-xl p-4"}>
-                <div className={"flex justify-end"}>
+                <div className={"flex justify-between items-center"}>
+                    <p className={"text-xl font-bold"}>{menu.menuName}</p>
                     <DefaultButton type={"button"} text={"Close"} onClick={onClose}/>
                 </div>
                 <div className={"overflow-auto"}>
                     <div>
-                        <p className={"text-xl font-bold"}>{menu.menuName}</p>
+
                         {menu.meals.map((meal,index) => (
                             <ul>
                                 <label className={"font-bold"} key={index}>{DAYS[index]}</label>
