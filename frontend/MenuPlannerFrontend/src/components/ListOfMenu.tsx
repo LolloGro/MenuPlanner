@@ -3,6 +3,7 @@ import {useState} from "react";
 import type {ReadMenu} from "../types/Menu.ts";
 import DefaultButton from "./DefaultButton.tsx";
 import ViewMenu from "./ViewMenu.tsx";
+import Spinner from "./Spinner.tsx";
 
 export default function ListOfMenu({onClose}:{onClose:() => void}) {
 
@@ -19,7 +20,7 @@ export default function ListOfMenu({onClose}:{onClose:() => void}) {
     }
 
     if(loadingViewMenu){
-        return <p>Loading</p>
+        return <Spinner/>
     }
 
     if(menu.length === 0) {

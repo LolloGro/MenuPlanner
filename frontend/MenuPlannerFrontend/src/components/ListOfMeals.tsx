@@ -3,6 +3,7 @@ import DefaultButton from "./DefaultButton.tsx";
 import {useState} from "react";
 import ViewMeal from "./ViewMeal";
 import type {Meal} from "../types/Meal";
+import Spinner from "./Spinner.tsx";
 
 export default function ListOfMeals({onClose}:{onClose:() => void} ) {
 
@@ -18,7 +19,7 @@ export default function ListOfMeals({onClose}:{onClose:() => void} ) {
     }
 
     if(loading){
-        return <p>Loading</p>
+        return <Spinner/>
     }
 
     if(meals.length === 0) {
