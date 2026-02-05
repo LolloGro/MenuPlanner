@@ -17,7 +17,6 @@ export default function Meals() {
         setView("RECIPE");
     };
 
-
     return (
     <Layout>
         <h2 className="text-2xl font-bold m-4">Meals</h2>

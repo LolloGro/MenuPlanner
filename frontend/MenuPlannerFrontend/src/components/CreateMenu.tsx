@@ -4,7 +4,7 @@ import type {Menu} from "../types/Menu"
 import type {Weekday} from "../types/Weekday";
 import type {Meal} from "../types/Meal";
 import {useMeals} from "../hooks/useMeals";
-import MealsButton from "../components/MealsButton";
+import DefaultButton from "./DefaultButton.tsx";
 import Spinner from "../components/Spinner";
 import * as React from "react";
 import {useAddMenus} from "../hooks/useMenus.ts";
@@ -73,7 +73,7 @@ export default function CreateMenu({onClose}: {onClose: () => void}) {
         <div className={"fixed inset-0 bg-black/50 flex items-center justify-center z-50"}>
             <div className={"flex flex-col justify-center max-h-screen min-w-100 bg-white rounded-lg shadow-xl p-6"}>
                 <div className={"mt-4"}>
-                    <MealsButton type={"button"} text={"Close"} onClick={onClose}/>
+                    <DefaultButton type={"button"} text={"Close"} onClick={onClose}/>
                     <div className={"flex flex-col"}>
                         <label className={"font-bold"}>Name of menu:</label>
                         <input className={"p-1 border rounded-md text-xl"}
@@ -98,16 +98,16 @@ export default function CreateMenu({onClose}: {onClose: () => void}) {
                                                value={day.mealName || "No meal selected"}
                                                readOnly={true}/>
 
-                                        <MealsButton type={"button"} text={"add"}
-                                                     onClick={()=>{
+                                        <DefaultButton type={"button"} text={"add"}
+                                                       onClick={()=>{
                                                          if(!mealForDay) {
                                                              alert("Please select a meal");
                                                              return;
                                                          }
                                                          handleMealId(index, mealForDay)
                                                      }}/>
-                                        <MealsButton type={"button"} text={"Remove"}
-                                                     onClick={() => {removeMealId(index)}}/>
+                                        <DefaultButton type={"button"} text={"Remove"}
+                                                       onClick={() => {removeMealId(index)}}/>
                                     </div>
                                 </div>
                             )}
@@ -115,7 +115,7 @@ export default function CreateMenu({onClose}: {onClose: () => void}) {
                     </div>
                 </div>
                 <form onSubmit={handleSubmit}>
-                    <MealsButton type={"submit"} text={"Save menu"}/>
+                    <DefaultButton type={"submit"} text={"Save menu"}/>
                     {menuMessage && <p>{menuMessage}</p>}
                     {errorMenu && <p>{errorMenu}</p>}
                     {loadingMenu && <Spinner/>}

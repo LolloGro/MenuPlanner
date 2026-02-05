@@ -3,7 +3,7 @@ import type {CreateMeal} from "../types/CreateMeal";
 import {useState} from "react";
 import {useAddMeal} from "../hooks/useMeals";
 import * as React from "react";
-import MealsButton from "./MealsButton";
+import DefaultButton from "./DefaultButton.tsx";
 import type {ViewOptions} from "../types/ViewOptions";
 import type {Meal} from "../types/Meal";
 
@@ -75,7 +75,7 @@ export default function MealForm({onYes, onNo}:{onYes:(meal: Meal) => void, onNo
                             <option key={meal} value={meal}>{meal}</option>
                         ))}
                     </select>
-                    <MealsButton type={"submit"} text={"Save"}/>
+                    <DefaultButton type={"submit"} text={"Save"}/>
                     {loading && <p>Saving</p>}
                     {error && <p>{error}</p>}
                 </form>}
@@ -85,8 +85,8 @@ export default function MealForm({onYes, onNo}:{onYes:(meal: Meal) => void, onNo
                 <p>{message}</p>
                 <p>Do you like to add a recipe to saved meal?</p>
                 <div>
-                    <MealsButton type={"button"} text={"Yes"} onClick={() => meal && onYes(meal)} />
-                    <MealsButton type={"button"} text={"No"} onClick={() => {
+                    <DefaultButton type={"button"} text={"Yes"} onClick={() => meal && onYes(meal)} />
+                    <DefaultButton type={"button"} text={"No"} onClick={() => {
                         setMessage(null); setMeal(null); onNo();
                     }}/>
                 </div>

@@ -1,6 +1,6 @@
 import type {ButtonType} from "../types/ButtonType";
 
-export default function MealsButton({type, text, onClick}: ButtonType) {
+export default function DefaultButton({type, text, onClick}: ButtonType) {
     return (
         <button
             type={type}

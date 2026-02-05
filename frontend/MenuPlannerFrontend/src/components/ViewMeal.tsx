@@ -2,7 +2,7 @@ import type {Meal} from "../types/Meal";
 import {useGetRecipe} from "../hooks/useRecipe";
 import type {Recipe} from "../types/Recipe";
 import {useState} from "react";
-import MealsButton from "./MealsButton";
+import DefaultButton from "./DefaultButton.tsx";
 import ViewRecipe from "./ViewRecipe";
 
 export default function ViewMeal({meal, onClose}:{meal:Meal, onClose: () => void}) {
@@ -28,7 +28,7 @@ export default function ViewMeal({meal, onClose}:{meal:Meal, onClose: () => void
         <div className={"fixed inset-0 bg-black/50 flex items-center justify-center z-50"}>
             <div className={"flex flex-col justify-center max-h-screen min-w-100 bg-white rounded-lg shadow-xl p-4"}>
                 <div className={"flex justify-end"}>
-                    <MealsButton type={"button"} text={"Close"} onClick={onClose}/>
+                    <DefaultButton type={"button"} text={"Close"} onClick={onClose}/>
                 </div>
                 <div className={"overflow-auto"}>
                     <div>
@@ -37,7 +37,7 @@ export default function ViewMeal({meal, onClose}:{meal:Meal, onClose: () => void
                         <p>Meal type: {meal.mealType}</p>
                         <p>Cooking time: {meal.time} min</p>
                     </div>
-                    <MealsButton type={"button"} text={"View recipe"} onClick={showRecipe}/>
+                    <DefaultButton type={"button"} text={"View recipe"} onClick={showRecipe}/>
                     <div>
                         {loading && <p>Loading</p>}
                         {message && <p>{message}</p>}
