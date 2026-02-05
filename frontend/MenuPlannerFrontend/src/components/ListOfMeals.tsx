@@ -10,7 +10,7 @@ export default function ListOfMeals({onClose}:{onClose:() => void} ) {
 
     const {meals, error, loading} = useMeals();
     const [meal, setMeal] = useState<Meal | null>(null);
-    const [searchFilter, setSearchFilter] = useState<String>("");
+    const [searchFilter, setSearchFilter] = useState<string>("");
 
     function handleView(ref:Meal){
         setMeal(ref);

@@ -10,7 +10,7 @@ export default function ListOfMenu({onClose}:{onClose:() => void}) {
 
     const {menu, errorViewMenu, loadingViewMenu} = useViewMenu();
     const [viewMenu, setViewMenu] = useState<ReadMenu | null>(null);
-    const [searchFilter, setSearchFilter] = useState<String>("");
+    const [searchFilter, setSearchFilter] = useState<string>("");
 
     function handleView(ref:ReadMenu){
         setViewMenu(ref);
