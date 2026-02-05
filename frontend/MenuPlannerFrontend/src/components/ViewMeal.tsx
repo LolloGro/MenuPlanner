@@ -4,6 +4,7 @@ import type {Recipe} from "../types/Recipe";
 import {useState} from "react";
 import DefaultButton from "./DefaultButton.tsx";
 import ViewRecipe from "./ViewRecipe";
+import Spinner from "./Spinner.tsx";
 
 export default function ViewMeal({meal, onClose}:{meal:Meal, onClose: () => void}) {
 
@@ -27,19 +28,20 @@ export default function ViewMeal({meal, onClose}:{meal:Meal, onClose: () => void
     return(
         <div className={"fixed inset-0 bg-black/50 flex items-center justify-center z-50"}>
             <div className={"flex flex-col justify-center max-h-screen min-w-100 bg-white rounded-lg shadow-xl p-4"}>
-                <div className={"flex justify-end"}>
+                <div className={"flex justify-between items-center"}>
+                    <p className={"text-xl font-bold"}>{meal.mealName}</p>
                     <DefaultButton type={"button"} text={"Close"} onClick={onClose}/>
                 </div>
                 <div className={"overflow-auto"}>
                     <div>
-                        <p className={"text-xl font-bold"}>{meal.mealName}</p>
+
                         <p>Main ingredient: {meal.mainIngredient}</p>
                         <p>Meal type: {meal.mealType}</p>
                         <p>Cooking time: {meal.time} min</p>
                     </div>
                     <DefaultButton type={"button"} text={"View recipe"} onClick={showRecipe}/>
                     <div>
-                        {loading && <p>Loading</p>}
+                        {loading && <Spinner/>}
                         {message && <p>{message}</p>}
                         {recipe && <ViewRecipe ingredients={recipe.ingredients} description={recipe.description}/>}
                         {error && <p>{error}</p>}

@@ -4,11 +4,13 @@ import {useState} from "react";
 import ViewMeal from "./ViewMeal";
 import type {Meal} from "../types/Meal";
 import Spinner from "./Spinner.tsx";
+import SearchFiled from "./SearchFiled.tsx";
 
 export default function ListOfMeals({onClose}:{onClose:() => void} ) {
 
     const {meals, error, loading} = useMeals();
     const [meal, setMeal] = useState<Meal | null>(null);
+    const [searchFilter, setSearchFilter] = useState<string>("");
 
     function handleView(ref:Meal){
         setMeal(ref);
@@ -26,6 +28,9 @@ export default function ListOfMeals({onClose}:{onClose:() => void} ) {
         return <p>No meals stored yet!</p>
     }
 
+   const filterMeals = meals.filter(meal =>
+   meal.mealName.toLowerCase().includes(searchFilter.toLowerCase()));
+
     return (
         <div className={"fixed inset-0 bg-black/50 flex items-center justify-center z-50"}>
             <div className={"flex flex-col justify-center max-h-screen min-w-100 bg-white rounded-lg shadow-xl p-4"}>
@@ -33,9 +38,10 @@ export default function ListOfMeals({onClose}:{onClose:() => void} ) {
                     <h2 className={"text-2xl"}>List of meals</h2>
                     <DefaultButton type={"button"} text={"Close"} onClick={onClose}/>
                 </div>
+                <SearchFiled onSearch={setSearchFilter} inputText={"search meal"}/>
                 <div className={"min-w-80 max-w-90 overflow-auto"}>
                     <ul>
-                        {meals.map(ref => (
+                        {filterMeals.map(ref => (
                             <li key={ref.id}><DefaultButton type={"button"} text={"View"} onClick={() => handleView(ref)}></DefaultButton>{ref.mealName}</li>
                         ))}
                     </ul>
