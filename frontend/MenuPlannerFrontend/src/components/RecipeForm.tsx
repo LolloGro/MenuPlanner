@@ -1,7 +1,7 @@
 import {useState} from "react";
 import type {Ingredient} from "../types/Ingredient";
 import * as React from "react";
-import MealsButton from "./MealsButton.tsx";
+import DefaultButton from "./DefaultButton.tsx";
 import {useAddRecipe} from "../hooks/useRecipe";
 import type {Recipe} from "../types/Recipe.ts";
 import type {Meal} from "../types/Meal";
@@ -66,7 +66,7 @@ export default function RecipeForm({meal, onClose}:{meal:Meal, onClose: () => vo
                                        value={newIngredient.measurement}
                                        onChange={(e) => setNewIngredient({...newIngredient, measurement: e.target.value})}
                                 ></input>
-                                <MealsButton type={"submit"} text={"Add ingredient"}/>
+                                <DefaultButton type={"submit"} text={"Add ingredient"}/>
                                 <label>Description</label>
                                 <textarea className={"p-1 border rounded-md h-50"}
                                           value={description}
@@ -84,7 +84,7 @@ export default function RecipeForm({meal, onClose}:{meal:Meal, onClose: () => vo
                                                 <p>{ingredient.measurement}</p>
                                             </div>
                                             <div className={"grid-span-2"}>
-                                                <MealsButton  type={"button"} text={"Remove"} onClick={() => removeIngredient(index)}/>
+                                                <DefaultButton type={"button"} text={"Remove"} onClick={() => removeIngredient(index)}/>
                                             </div>
                                         </li>
                                     ))}
@@ -93,8 +93,8 @@ export default function RecipeForm({meal, onClose}:{meal:Meal, onClose: () => vo
 
                             <form className={"flex flex-col justify-center items-center"} onSubmit={saveRecipe}>
                                 <div>
-                                    <MealsButton type={"submit"} text={"Save"}/>
-                                    <MealsButton type={"button"} text={"Close"} onClick={onClose}/>
+                                    <DefaultButton type={"submit"} text={"Save"}/>
+                                    <DefaultButton type={"button"} text={"Close"} onClick={onClose}/>
                                 </div>
                                 {loading && <p>{"Saving"}</p>}
                                 {error && <p>{error}</p>}

@@ -1,6 +1,6 @@
-import {useState} from "react";
-import type {Menu} from "../types/Menu.ts";
-import {addMenu} from "../service/menuService.ts";
+import {useEffect, useState} from "react";
+import type {Menu, ReadMenu} from "../types/Menu.ts";
+import {addMenu, getMenus} from "../service/menuService.ts";
 
 export function useAddMenus() {
     const [errorMenu, setErrorMenu] = useState<string | null>(null);
@@ -22,4 +22,18 @@ export function useAddMenus() {
     };
 
     return {menuToAdd, errorMenu, loadingMenu};
+}
+
+export function useViewMenu() {
+    const [menu, setMenu] = useState<ReadMenu[]>([]);
+    const [errorViewMenu, setErrorViewMenu] = useState<string | null>(null);
+    const [loadingViewMenu, setLoadingViewMenu] = useState<boolean>(true);
+
+    useEffect(() => {
+        getMenus().then(setMenu)
+            .catch(error => setErrorViewMenu(error.message))
+            .finally(() => setLoadingViewMenu(false));
+    },[]);
+
+    return {menu, errorViewMenu, loadingViewMenu};
 }
